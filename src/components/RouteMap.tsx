@@ -5,6 +5,7 @@ import MapView, { Marker, Polyline, type Region } from "react-native-maps";
 
 import { MAP_STYLE, MAP_STYLE_PREVIEW } from "@/data/mapStyle";
 import { MAP_PROVIDER } from "@/lib/mapProvider";
+import { useMarkerTracking } from "@/lib/useMarkerTracking";
 import { colors } from "@/theme";
 import type { RouteOption } from "@/types/spot";
 
@@ -52,6 +53,8 @@ export function RouteMap({
   compact?: boolean;
 }) {
   const region = useMemo(() => regionFor(option), [option]);
+  // Markers are rasterised; track only while their appearance is settling.
+  const tracking = useMarkerTracking(`${option.key}|${progress}|${compact}`);
   const rideIndex = option.segments.findIndex((segment) => segment.kind === "ride");
 
   const start = option.segments[0]?.points[0];
@@ -111,9 +114,11 @@ export function RouteMap({
           <Marker
             coordinate={{ latitude: start.lat, longitude: start.lng }}
             anchor={{ x: 0.5, y: 0.5 }}
-            tracksViewChanges={false}
+            tracksViewChanges={tracking}
           >
-            <View style={[styles.node, compact && styles.nodeSmall, styles.nodeStart]} />
+            <View style={compact ? styles.nodeWrapSmall : styles.nodeWrap}>
+              <View style={[styles.node, compact && styles.nodeSmall, styles.nodeStart]} />
+            </View>
           </Marker>
         ) : null}
 
@@ -121,15 +126,17 @@ export function RouteMap({
           <Marker
             coordinate={{ latitude: end.lat, longitude: end.lng }}
             anchor={{ x: 0.5, y: 0.5 }}
-            tracksViewChanges={false}
+            tracksViewChanges={tracking}
           >
-            <View
-              style={[
-                styles.node,
-                compact ? styles.nodeSmall : styles.nodeLarge,
-                styles.nodeEnd
-              ]}
-            />
+            <View style={compact ? styles.nodeWrapSmall : styles.nodeWrap}>
+              <View
+                style={[
+                  styles.node,
+                  compact ? styles.nodeSmall : styles.nodeLarge,
+                  styles.nodeEnd
+                ]}
+              />
+            </View>
           </Marker>
         ) : null}
 
@@ -137,10 +144,12 @@ export function RouteMap({
           <Marker
             coordinate={{ latitude: vehicle.lat, longitude: vehicle.lng }}
             anchor={{ x: 0.5, y: 0.5 }}
-            tracksViewChanges={false}
+            tracksViewChanges={tracking}
           >
-            <View style={[styles.vehicle, { backgroundColor: option.color }]}>
-              <Ionicons name={option.icon as never} size={11} color="#fff" />
+            <View style={styles.vehicleWrap}>
+              <View style={[styles.vehicle, { backgroundColor: option.color }]}>
+                <Ionicons name={option.icon as never} size={11} color="#fff" />
+              </View>
             </View>
           </Marker>
         ) : null}
@@ -154,6 +163,26 @@ const styles = StyleSheet.create({
     flex: 1,
     overflow: "hidden",
     backgroundColor: colors.mapLand
+  },
+  // Marker children are rasterised to their exact bounds, so borders and
+  // shadows need room inside the wrapper or they are cut off.
+  nodeWrap: {
+    width: 32,
+    height: 32,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  nodeWrapSmall: {
+    width: 20,
+    height: 20,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  vehicleWrap: {
+    width: 38,
+    height: 38,
+    alignItems: "center",
+    justifyContent: "center"
   },
   node: {
     width: 14,

@@ -1,8 +1,6 @@
 import { Component, type ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-import { traceError } from "@/lib/trace";
-
 interface Props {
   children: ReactNode;
   /** Named in the fallback so it is obvious which map failed. */
@@ -30,7 +28,7 @@ export class MapErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error) {
-    traceError(`map crashed: ${this.props.label}`, error);
+    console.error(`[map] ${this.props.label} crashed:`, error);
   }
 
   render() {
@@ -40,8 +38,8 @@ export class MapErrorBoundary extends Component<Props, State> {
           <Text style={styles.title}>Map failed to render</Text>
           <Text style={styles.detail}>{this.state.error.message}</Text>
           <Text style={styles.hint}>
-            The rest of the screen still works. Check the boot trace and the Metro
-            logs for the native error.
+            The rest of the screen still works. The native error is in the Metro
+            logs.
           </Text>
         </View>
       );
@@ -64,12 +62,14 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 15,
+    lineHeight: 19,
     fontWeight: "700",
     color: "#1D1A17",
     marginBottom: 8
   },
   detail: {
     fontSize: 12,
+    lineHeight: 15,
     color: "#C5050C",
     textAlign: "center",
     marginBottom: 10

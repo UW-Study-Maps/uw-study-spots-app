@@ -11,12 +11,10 @@ import { SpotCard } from "@/components/SpotCard";
 import { Toast } from "@/components/Toast";
 import { CAT, CATS, TAGS } from "@/data/categories";
 import { SPOTS } from "@/data/spots";
-import { trace } from "@/lib/trace";
 import { colors, fonts, overline } from "@/theme";
 import type { Category, Spot } from "@/types/spot";
 
 export default function HomeScreen() {
-  trace("HomeScreen render");
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<Category | "All">("All");
@@ -98,13 +96,7 @@ export default function HomeScreen() {
         </ScrollView>
       </View>
 
-      <View
-        style={styles.body}
-        onLayout={(event) => {
-          const { width, height } = event.nativeEvent.layout;
-          trace("HomeScreen body layout", `${Math.round(width)}x${Math.round(height)}`);
-        }}
-      >
+      <View style={styles.body}>
         {mapView ? (
           <MapErrorBoundary label="campus map">
             <CampusMap spots={list} selectedId={selectedId} onSelect={openSpot} />
@@ -165,6 +157,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: fonts.body,
     fontSize: 13.5,
+    lineHeight: 17,
     color: colors.ink,
     padding: 0
   },
@@ -224,6 +217,7 @@ const styles = StyleSheet.create({
   count: {
     ...overline,
     fontSize: 10.5,
+    lineHeight: 14,
     paddingHorizontal: 4,
     paddingBottom: 10
   },
@@ -234,6 +228,7 @@ const styles = StyleSheet.create({
   empty: {
     fontFamily: fonts.body,
     fontSize: 13,
+    lineHeight: 17,
     color: colors.faint,
     textAlign: "center",
     paddingVertical: 30

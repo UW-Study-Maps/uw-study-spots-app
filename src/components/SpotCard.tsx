@@ -92,12 +92,13 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     fontFamily: fonts.displayS,
     fontSize: 15,
-    lineHeight: 19,
+    lineHeight: 20,
     color: colors.ink
   },
   walk: {
     fontFamily: fonts.bold,
     fontSize: 10.5,
+    lineHeight: 14,
     color: colors.faint
   },
   statusRow: {
@@ -114,6 +115,7 @@ const styles = StyleSheet.create({
   statusPillText: {
     fontFamily: fonts.bold,
     fontSize: 10,
+    lineHeight: 13,
     letterSpacing: 0.4,
     textTransform: "uppercase",
     color: "#fff"
@@ -122,6 +124,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: fonts.body,
     fontSize: 11.5,
+    lineHeight: 15,
     color: colors.faint
   },
   desc: {

@@ -5,10 +5,10 @@ import MapView, { Marker } from "react-native-maps";
 import { CAT } from "@/data/categories";
 import { MAP_STYLE } from "@/data/mapStyle";
 import { MAP_PROVIDER } from "@/lib/mapProvider";
-import { trace, traceError } from "@/lib/trace";
+import { useMarkerTracking } from "@/lib/useMarkerTracking";
 import { useAppState } from "@/state/appState";
 import { colors, fonts, overline } from "@/theme";
-import type { Spot } from "@/types/spot";
+import type { Spot, StatusMeta } from "@/types/spot";
 
 // Frames the isthmus campus — Union South through the Memorial Union Terrace.
 // Tight enough that local streets are already drawn at first paint.
@@ -20,11 +20,55 @@ const INITIAL_REGION = {
 };
 
 /**
- * The campus map: Google Maps under the design's own pins.
+ * One spot on the map: a category-colored circle with a crowding dot.
+ *
+ * The wrapper is deliberately larger than the circle. A marker's children are
+ * rasterised into a bitmap of exactly the view's bounds, so anything reaching
+ * past them — the status dot, the border, the shadow — gets cut off. The spare
+ * padding is what keeps the circle round and the dot whole.
+ */
+function SpotMarker({
+  spot,
+  status,
+  active,
+  onPress
+}: {
+  spot: Spot;
+  status: StatusMeta;
+  active: boolean;
+  onPress: () => void;
+}) {
+  // Re-rasterise when the marker's appearance changes, not on every frame.
+  const tracking = useMarkerTracking(`${status.color}|${active}`);
+  const cat = CAT[spot.cat];
+
+  return (
+    <Marker
+      coordinate={{ latitude: spot.lat, longitude: spot.lng }}
+      onPress={onPress}
+      // Centre of the circle sits on the coordinate.
+      anchor={{ x: 0.5, y: 0.5 }}
+      tracksViewChanges={tracking}
+      zIndex={active ? 20 : 10}
+    >
+      <View style={styles.markerWrap}>
+        <View
+          style={[styles.circle, { backgroundColor: cat.color }, active && styles.circleActive]}
+        >
+          <Ionicons name={cat.icon as never} size={15} color="#fff" />
+        </View>
+        <View style={[styles.statusDot, { backgroundColor: status.color }]} />
+      </View>
+    </Marker>
+  );
+}
+
+/**
+ * The campus map: Google Maps under the app's own markers.
  *
  * The basemap is styled down to streets and water (see MAP_STYLE) so it stays
  * a backdrop — buildings, business POIs and transit icons are all off, which
- * is what keeps the crowding pins readable at campus zoom.
+ * is what keeps the crowding markers readable at campus zoom.
  */
 export function CampusMap({
   spots,
@@ -36,21 +80,10 @@ export function CampusMap({
   onSelect: (spot: Spot) => void;
 }) {
   const { statusOf, location } = useAppState();
-  trace("CampusMap render", `provider=${MAP_PROVIDER ?? "default(apple)"} spots=${spots.length}`);
+  const meTracking = useMarkerTracking(`${location.origin.lat},${location.origin.lng}`);
 
   return (
-    <View
-      style={styles.container}
-      onLayout={(event) => {
-        const { width, height } = event.nativeEvent.layout;
-        // A view with no height initialises and reports ready while showing
-        // nothing, which looks identical to a crash.
-        trace(
-          "CampusMap container layout",
-          `${Math.round(width)}x${Math.round(height)}${height < 1 ? "  <-- ZERO HEIGHT" : ""}`
-        );
-      }}
-    >
+    <View style={styles.container}>
       <MapView
         style={StyleSheet.absoluteFill}
         provider={MAP_PROVIDER}
@@ -64,55 +97,28 @@ export function CampusMap({
         // The app draws its own "you" dot when it has a real fix; Google's blue
         // dot would contradict it whenever we are on the campus fallback.
         showsUserLocation={false}
-        onMapReady={() => trace("CampusMap onMapReady")}
-        onLayout={(event) => {
-          const { width, height } = event.nativeEvent.layout;
-          trace(
-            "CampusMap MapView layout",
-            `${Math.round(width)}x${Math.round(height)}${height < 1 ? "  <-- ZERO HEIGHT" : ""}`
-          );
-        }}
       >
         <Marker
           coordinate={{ latitude: location.origin.lat, longitude: location.origin.lng }}
           anchor={{ x: 0.5, y: 0.5 }}
-          tracksViewChanges={false}
+          tracksViewChanges={meTracking}
           title={location.label}
+          zIndex={5}
         >
-          <View style={styles.me} />
+          <View style={styles.meWrap}>
+            <View style={styles.me} />
+          </View>
         </Marker>
 
-        {spots.map((spot) => {
-          const cat = CAT[spot.cat];
-          const status = statusOf(spot);
-          const active = spot.id === selectedId;
-          return (
-            <Marker
-              key={spot.id}
-              coordinate={{ latitude: spot.lat, longitude: spot.lng }}
-              onPress={() => onSelect(spot)}
-              // Keep the teardrop's point on the coordinate, not its centre.
-              anchor={{ x: 0.5, y: 1 }}
-              // Re-render only when the pin's own appearance changes, so the
-              // markers are not rasterised on every pan.
-              tracksViewChanges={active}
-            >
-              <View style={styles.pinWrap}>
-                <View
-                  style={[styles.pin, { backgroundColor: cat.color }, active && styles.pinActive]}
-                >
-                  <Ionicons
-                    name={cat.icon as never}
-                    size={11}
-                    color="#fff"
-                    style={styles.pinIcon}
-                  />
-                </View>
-                <View style={[styles.statusDot, { backgroundColor: status.color }]} />
-              </View>
-            </Marker>
-          );
-        })}
+        {spots.map((spot) => (
+          <SpotMarker
+            key={spot.id}
+            spot={spot}
+            status={statusOf(spot)}
+            active={spot.id === selectedId}
+            onPress={() => onSelect(spot)}
+          />
+        ))}
       </MapView>
 
       <View style={styles.legend} pointerEvents="none">
@@ -143,6 +149,50 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: colors.mapLand
   },
+
+  // 44pt wide for a 34pt circle: the spare 5pt on each side is what stops the
+  // border, dot and shadow being clipped out of the rasterised bitmap.
+  markerWrap: {
+    width: 44,
+    height: 44,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  circle: {
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 2.5,
+    borderColor: "#fff",
+    shadowColor: "#000",
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 4
+  },
+  circleActive: {
+    borderColor: colors.ink,
+    borderWidth: 3
+  },
+  statusDot: {
+    position: "absolute",
+    top: 4,
+    right: 4,
+    width: 13,
+    height: 13,
+    borderRadius: 7,
+    borderWidth: 2,
+    borderColor: "#fff"
+  },
+
+  meWrap: {
+    width: 28,
+    height: 28,
+    alignItems: "center",
+    justifyContent: "center"
+  },
   me: {
     width: 16,
     height: 16,
@@ -152,49 +202,11 @@ const styles = StyleSheet.create({
     borderColor: "#fff",
     shadowColor: "#000",
     shadowOpacity: 0.3,
-    shadowRadius: 8,
+    shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
     elevation: 4
   },
-  pinWrap: {
-    width: 34,
-    height: 38,
-    alignItems: "center"
-  },
-  pin: {
-    width: 30,
-    height: 30,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 0,
-    transform: [{ rotate: "-45deg" }],
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 2,
-    borderColor: "#fff",
-    shadowColor: "#000",
-    shadowOpacity: 0.35,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 3 },
-    elevation: 5
-  },
-  pinActive: {
-    transform: [{ rotate: "-45deg" }, { scale: 1.2 }]
-  },
-  pinIcon: {
-    transform: [{ rotate: "45deg" }]
-  },
-  statusDot: {
-    position: "absolute",
-    top: -3,
-    right: 0,
-    width: 11,
-    height: 11,
-    borderRadius: 6,
-    borderWidth: 2,
-    borderColor: "#fff"
-  },
+
   legend: {
     position: "absolute",
     left: 12,
@@ -215,6 +227,7 @@ const styles = StyleSheet.create({
   legendTitle: {
     ...overline,
     fontSize: 9,
+    lineHeight: 13,
     marginBottom: 2
   },
   legendRow: {
@@ -230,6 +243,7 @@ const styles = StyleSheet.create({
   legendLabel: {
     fontFamily: fonts.medium,
     fontSize: 11,
+    lineHeight: 15,
     color: colors.muted
   }
 });

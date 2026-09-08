@@ -2,7 +2,6 @@ import * as Location from "expo-location";
 import { useCallback, useEffect, useState } from "react";
 
 import { FALLBACK_ORIGIN } from "@/data/spots";
-import { trace, traceError } from "@/lib/trace";
 import type { LatLng } from "@/lib/polyline";
 
 export type LocationStatus = "pending" | "granted" | "denied" | "unavailable";
@@ -41,9 +40,8 @@ export function useDeviceLocation(): DeviceLocation {
       });
       setOrigin({ lat: position.coords.latitude, lng: position.coords.longitude });
       setStatus("granted");
-    } catch (error) {
+    } catch {
       // Services off, or no fix available indoors.
-      traceError("location: getCurrentPosition failed", error);
       setStatus("unavailable");
       setOrigin(FALLBACK_ORIGIN);
     }
@@ -54,14 +52,11 @@ export function useDeviceLocation(): DeviceLocation {
     let cancelled = false;
     (async () => {
       try {
-        trace("location: checking existing permission");
         const { granted } = await Location.getForegroundPermissionsAsync();
         if (cancelled) return;
-        trace("location: permission", granted ? "granted" : "not granted");
         if (granted) await readPosition();
         else setStatus("denied");
-      } catch (error) {
-        traceError("location: permission check failed", error);
+      } catch {
         if (!cancelled) setStatus("unavailable");
       }
     })();

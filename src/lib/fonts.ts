@@ -1,5 +1,3 @@
-import { trace } from "@/lib/trace";
-
 import {
   Fraunces_600SemiBold,
   Fraunces_700Bold,
@@ -19,7 +17,6 @@ import {
  * fallback face.
  */
 export function useAppFonts(): boolean {
-  trace("useAppFonts called");
   const [frauncesLoaded] = useFraunces({ Fraunces_600SemiBold, Fraunces_700Bold });
   const [interLoaded] = useInter({
     Inter_400Regular,
@@ -27,6 +24,5 @@ export function useAppFonts(): boolean {
     Inter_600SemiBold,
     Inter_700Bold
   });
-  trace("useAppFonts result", `fraunces=${frauncesLoaded} inter=${interLoaded}`);
   return frauncesLoaded && interLoaded;
 }

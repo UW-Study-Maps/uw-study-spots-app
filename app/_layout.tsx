@@ -1,7 +1,3 @@
-import { trace, traceError } from "@/lib/trace";
-
-trace("app/_layout module evaluating");
-
 import { Stack, type ErrorBoundaryProps } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
@@ -9,10 +5,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Onboarding } from "@/components/Onboarding";
 import { useAppFonts } from "@/lib/fonts";
 import { AppStateProvider, useAppState } from "@/state/appState";
-import { BootTrace } from "@/components/BootTrace";
 import { colors } from "@/theme";
-
-trace("app/_layout imports resolved");
 
 /**
  * The root layout must render a navigator on *every* render, including the
@@ -25,11 +18,9 @@ trace("app/_layout imports resolved");
  * mounted and the pre-app states are layered over it.
  */
 function RootNavigator() {
-  trace("RootNavigator render start");
   const { hydrated, onboarded } = useAppState();
   const fontsLoaded = useAppFonts();
   const ready = fontsLoaded && hydrated;
-  trace("RootNavigator state", `fonts=${fontsLoaded} hydrated=${hydrated} onboarded=${onboarded}`);
 
   return (
     <View style={styles.root}>
@@ -50,8 +41,6 @@ function RootNavigator() {
           <Onboarding />
         </View>
       ) : null}
-
-      <BootTrace />
     </View>
   );
 }
@@ -65,7 +54,6 @@ function RootNavigator() {
  * client built before those were added has to be rebuilt).
  */
 export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
-  traceError("ErrorBoundary caught", error);
   return (
     <View style={styles.errorScreen}>
       <ScrollView contentContainerStyle={styles.errorContent}>
@@ -81,7 +69,6 @@ export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
 }
 
 export default function RootLayout() {
-  trace("RootLayout render");
   return (
     <AppStateProvider>
       <StatusBar style="dark" />
@@ -108,6 +95,7 @@ const styles = StyleSheet.create({
   },
   errorTitle: {
     fontSize: 20,
+    lineHeight: 25,
     fontWeight: "700",
     color: colors.ink,
     marginBottom: 12

@@ -184,6 +184,7 @@ const styles = StyleSheet.create({
   notFound: {
     fontFamily: fonts.body,
     fontSize: 14,
+    lineHeight: 18,
     color: colors.muted,
     padding: 30,
     textAlign: "center"
@@ -213,12 +214,13 @@ const styles = StyleSheet.create({
   badgeText: {
     fontFamily: fonts.bold,
     fontSize: 9.5,
+    lineHeight: 12,
     letterSpacing: 0.6
   },
   name: {
     fontFamily: fonts.displayS,
     fontSize: 21,
-    lineHeight: 25,
+    lineHeight: 28,
     color: colors.ink,
     marginTop: 7,
     marginBottom: 5
@@ -261,6 +263,7 @@ const styles = StyleSheet.create({
   primaryBtnText: {
     fontFamily: fonts.semi,
     fontSize: 14,
+    lineHeight: 18,
     color: "#fff"
   },
   secondaryBtn: {
@@ -275,6 +278,7 @@ const styles = StyleSheet.create({
   secondaryBtnText: {
     fontFamily: fonts.semi,
     fontSize: 13.5,
+    lineHeight: 17,
     color: colors.muted
   },
   panel: {
@@ -302,7 +306,8 @@ const styles = StyleSheet.create({
   },
   statusText: {
     flex: 1,
-    fontSize: 13.5
+    fontSize: 13.5,
+    lineHeight: 17
   },
   statusStrong: {
     fontFamily: fonts.semi,
@@ -332,6 +337,7 @@ const styles = StyleSheet.create({
   barLabel: {
     fontFamily: fonts.body,
     fontSize: 9.5,
+    lineHeight: 12,
     color: colors.faint,
     textAlign: "center",
     marginTop: 5
@@ -353,6 +359,7 @@ const styles = StyleSheet.create({
   factText: {
     fontFamily: fonts.body,
     fontSize: 12,
+    lineHeight: 15,
     color: colors.muted
   },
   desc: {
@@ -371,6 +378,7 @@ const styles = StyleSheet.create({
   tag: {
     fontFamily: fonts.semi,
     fontSize: 11.5,
+    lineHeight: 15,
     color: colors.muted,
     backgroundColor: colors.panel,
     borderWidth: 1,

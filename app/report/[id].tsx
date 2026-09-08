@@ -156,6 +156,7 @@ const styles = StyleSheet.create({
   missing: {
     fontFamily: fonts.body,
     fontSize: 14,
+    lineHeight: 18,
     color: colors.muted,
     padding: 30,
     textAlign: "center"
@@ -181,6 +182,7 @@ const styles = StyleSheet.create({
   contextText: {
     fontFamily: fonts.bold,
     fontSize: 10,
+    lineHeight: 13,
     letterSpacing: 0.7,
     textTransform: "uppercase",
     color: colors.uwRedDeep
@@ -188,7 +190,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: fonts.displayS,
     fontSize: 23,
-    lineHeight: 28,
+    lineHeight: 30,
     color: colors.ink,
     marginTop: 12,
     marginBottom: 4
@@ -196,6 +198,7 @@ const styles = StyleSheet.create({
   sub: {
     fontFamily: fonts.body,
     fontSize: 13,
+    lineHeight: 17,
     color: colors.faint,
     marginBottom: 18
   },
@@ -232,6 +235,7 @@ const styles = StyleSheet.create({
   submitText: {
     fontFamily: fonts.semi,
     fontSize: 15,
+    lineHeight: 19,
     color: "#fff"
   },
   dismiss: {
@@ -241,6 +245,7 @@ const styles = StyleSheet.create({
   dismissText: {
     fontFamily: fonts.medium,
     fontSize: 13,
+    lineHeight: 17,
     color: colors.faint
   }
 });

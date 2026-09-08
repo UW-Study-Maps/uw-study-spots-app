@@ -110,12 +110,13 @@ const styles = StyleSheet.create({
   logoText: {
     fontFamily: fonts.displayB,
     fontSize: 22,
+    lineHeight: 29,
     color: "#fff"
   },
   heading: {
     fontFamily: fonts.displayS,
     fontSize: 30,
-    lineHeight: 35,
+    lineHeight: 39,
     color: "#fff",
     marginTop: 26,
     marginBottom: 12
@@ -145,6 +146,7 @@ const styles = StyleSheet.create({
   permissionTitle: {
     fontFamily: fonts.semi,
     fontSize: 14,
+    lineHeight: 18,
     color: "#fff"
   },
   permissionText: {
@@ -166,6 +168,7 @@ const styles = StyleSheet.create({
   primaryText: {
     fontFamily: fonts.semi,
     fontSize: 15.5,
+    lineHeight: 20,
     color: "#fff"
   },
   secondary: {
@@ -175,6 +178,7 @@ const styles = StyleSheet.create({
   secondaryText: {
     fontFamily: fonts.medium,
     fontSize: 13.5,
+    lineHeight: 17,
     color: "rgba(255,255,255,0.5)"
   }
 });

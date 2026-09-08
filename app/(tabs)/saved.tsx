@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: fonts.displayS,
     fontSize: 22,
+    lineHeight: 29,
     color: colors.ink
   },
   count: {
@@ -85,6 +86,7 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontFamily: fonts.displayS,
     fontSize: 17,
+    lineHeight: 23,
     color: colors.ink,
     marginTop: 4
   },

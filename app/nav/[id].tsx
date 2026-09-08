@@ -207,18 +207,20 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontFamily: fonts.displayS,
     fontSize: 21,
-    lineHeight: 25,
+    lineHeight: 28,
     color: "#fff"
   },
   headerSub: {
     fontFamily: fonts.body,
     fontSize: 13,
+    lineHeight: 17,
     color: "rgba(255,255,255,0.75)",
     marginTop: 3
   },
   headerDur: {
     fontFamily: fonts.displayS,
     fontSize: 24,
+    lineHeight: 32,
     color: "#fff"
   },
   mapWrap: {
@@ -252,6 +254,7 @@ const styles = StyleSheet.create({
   liveText: {
     fontFamily: fonts.semi,
     fontSize: 11,
+    lineHeight: 14,
     color: "#fff"
   },
   transitBar: {
@@ -276,11 +279,13 @@ const styles = StyleSheet.create({
   transitLine: {
     fontFamily: fonts.semi,
     fontSize: 13,
+    lineHeight: 17,
     color: "#fff"
   },
   transitDetail: {
     fontFamily: fonts.body,
     fontSize: 11.5,
+    lineHeight: 15,
     color: "rgba(255,255,255,0.55)",
     marginTop: 2
   },
@@ -290,11 +295,13 @@ const styles = StyleSheet.create({
   transitCountdown: {
     fontFamily: fonts.semi,
     fontSize: 15,
+    lineHeight: 19,
     color: colors.amber
   },
   transitSource: {
     fontFamily: fonts.body,
     fontSize: 10,
+    lineHeight: 13,
     color: "rgba(255,255,255,0.45)"
   },
   steps: {
@@ -356,6 +363,7 @@ const styles = StyleSheet.create({
   stepMeta: {
     fontFamily: fonts.body,
     fontSize: 11.5,
+    lineHeight: 15,
     color: "rgba(255,255,255,0.45)",
     marginTop: 3
   },
@@ -378,11 +386,13 @@ const styles = StyleSheet.create({
   eta: {
     fontFamily: fonts.displayS,
     fontSize: 22,
+    lineHeight: 29,
     color: "#fff"
   },
   etaMeta: {
     fontFamily: fonts.body,
     fontSize: 11.5,
+    lineHeight: 15,
     color: "rgba(255,255,255,0.5)",
     marginTop: 2
   },
@@ -395,6 +405,7 @@ const styles = StyleSheet.create({
   skipText: {
     fontFamily: fonts.semi,
     fontSize: 12.5,
+    lineHeight: 16,
     color: "#fff"
   },
   end: {
@@ -406,6 +417,7 @@ const styles = StyleSheet.create({
   endText: {
     fontFamily: fonts.semi,
     fontSize: 12.5,
+    lineHeight: 16,
     color: colors.ink
   }
 });

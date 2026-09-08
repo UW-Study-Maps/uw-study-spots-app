@@ -10,7 +10,6 @@ import {
 } from "react";
 
 import { ST } from "@/data/categories";
-import { trace, traceError } from "@/lib/trace";
 import { useDeviceLocation, type DeviceLocation } from "@/lib/useDeviceLocation";
 import type { CrowdLevel, NoiseLevel, OutletLevel, SpotReport, StatusMeta } from "@/types/spot";
 import type { Spot } from "@/types/spot";
@@ -44,7 +43,6 @@ interface AppState {
 const AppStateContext = createContext<AppState | null>(null);
 
 export function AppStateProvider({ children }: { children: ReactNode }) {
-  trace("AppStateProvider render");
   const [hydrated, setHydrated] = useState(false);
   const [onboarded, setOnboarded] = useState(false);
   const [savedIds, setSavedIds] = useState<string[]>([]);
@@ -56,22 +54,16 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     let cancelled = false;
     (async () => {
       try {
-        trace("AsyncStorage read start");
         const [saved, seen] = await AsyncStorage.multiGet([SAVED_KEY, ONBOARD_KEY]);
-        trace("AsyncStorage read done");
         if (cancelled) return;
         const parsed = saved[1] ? (JSON.parse(saved[1]) as string[]) : [];
         setSavedIds(Array.isArray(parsed) ? parsed : []);
         setOnboarded(seen[1] === "1");
-      } catch (error) {
+      } catch {
         // A first run, cleared storage, or corrupt JSON all mean "start fresh"
         // rather than "fail" — the defaults above are already correct.
-        traceError("AsyncStorage read failed", error);
       } finally {
-        if (!cancelled) {
-          trace("hydrated");
-          setHydrated(true);
-        }
+        if (!cancelled) setHydrated(true);
       }
     })();
     return () => {

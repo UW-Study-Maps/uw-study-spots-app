@@ -60,6 +60,7 @@ export const fonts = {
 export const overline = {
   fontFamily: fonts.bold,
   fontSize: 10,
+  lineHeight: 14,
   letterSpacing: 0.7,
   textTransform: "uppercase" as const,
   color: colors.faint

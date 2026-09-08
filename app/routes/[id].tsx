@@ -202,6 +202,7 @@ const styles = StyleSheet.create({
   missing: {
     fontFamily: fonts.body,
     fontSize: 14,
+    lineHeight: 18,
     color: colors.muted,
     textAlign: "center",
     padding: 40
@@ -223,18 +224,21 @@ const styles = StyleSheet.create({
   backText: {
     fontFamily: fonts.semi,
     fontSize: 13.5,
+    lineHeight: 17,
     color: colors.muted
   },
   headerOverline: overline,
   headerTitle: {
     fontFamily: fonts.displayS,
     fontSize: 20,
+    lineHeight: 26,
     color: colors.ink,
     marginTop: 4
   },
   headerSub: {
     fontFamily: fonts.body,
     fontSize: 12.5,
+    lineHeight: 16,
     color: colors.faint,
     marginTop: 3
   },
@@ -254,6 +258,7 @@ const styles = StyleSheet.create({
   loadingText: {
     fontFamily: fonts.body,
     fontSize: 13,
+    lineHeight: 17,
     color: colors.faint
   },
   card: {
@@ -296,11 +301,13 @@ const styles = StyleSheet.create({
   time: {
     fontFamily: fonts.displayS,
     fontSize: 19,
+    lineHeight: 25,
     color: colors.ink
   },
   arrive: {
     fontFamily: fonts.body,
     fontSize: 12,
+    lineHeight: 15,
     color: colors.faint
   },
   summaryRow: {
@@ -319,6 +326,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: fonts.body,
     fontSize: 12.5,
+    lineHeight: 16,
     color: colors.muted
   },
   tag: {
@@ -332,6 +340,7 @@ const styles = StyleSheet.create({
   tagText: {
     fontFamily: fonts.bold,
     fontSize: 9.5,
+    lineHeight: 12,
     letterSpacing: 0.6,
     textTransform: "uppercase",
     color: colors.muted
@@ -370,11 +379,13 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: fonts.body,
     fontSize: 12.5,
+    lineHeight: 16,
     color: colors.muted
   },
   legDur: {
     fontFamily: fonts.semi,
     fontSize: 11.5,
+    lineHeight: 15,
     color: colors.faint
   },
   note: {
@@ -414,6 +425,7 @@ const styles = StyleSheet.create({
   startText: {
     fontFamily: fonts.semi,
     fontSize: 15,
+    lineHeight: 19,
     color: "#fff"
   }
 });

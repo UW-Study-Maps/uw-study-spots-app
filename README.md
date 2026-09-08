@@ -80,9 +80,16 @@ The palette is the design's own: warm paper ground, near-white roads with a
 hairline border, muted water. `MAP_STYLE_PREVIEW` adds one rule dropping every
 label, for the small route previews where street names would be unreadable.
 
-Pins, the "you" dot and the route lines are the app's own views drawn as
-`Marker` and `Polyline` children, so the design's teardrop pin with its
-crowding dot survives the switch to a real basemap.
+Markers and route lines are the app's own views, drawn as `Marker` and
+`Polyline` children: a category-colored circle centred on the coordinate, with
+a crowding dot in the corner.
+
+Each marker sits inside a wrapper noticeably larger than the circle itself.
+react-native-maps rasterises a marker's children to a bitmap of exactly the
+view's bounds, so borders, shadows and the status dot get cut off without that
+padding — and `tracksViewChanges` has to be on briefly for the bitmap to be
+captured at all, then off so panning does not re-rasterise every marker on
+every frame. `useMarkerTracking` handles that.
 
 > **A Google Maps API key is required.** Set `GOOGLE_MAPS_API_KEY` (see
 > `.env.example`) with "Maps SDK for Android" and "Maps SDK for iOS" enabled.
@@ -260,7 +267,9 @@ with to the Maps key's Android restrictions.
    before that has no native code for them and will crash on launch.
 2. **Read the error.** The root layout exports an `ErrorBoundary`
    ([app/_layout.tsx](app/_layout.tsx)) that renders the message and stack
-   instead of a blank window, so a startup crash now says what failed.
+   instead of a blank window, so a startup crash says what failed. Maps are
+   additionally wrapped in `MapErrorBoundary`, so a native map failure shows an
+   inline message rather than taking the screen down with it.
 3. **iOS in Expo Go shows an unstyled map, not a black one.** `PROVIDER_GOOGLE`
    has no SDK behind it there, so [src/lib/mapProvider.ts](src/lib/mapProvider.ts)
    falls back to Apple Maps and logs a warning. `customMapStyle` is ignored in
@@ -280,49 +289,6 @@ with to the Maps key's Android restrictions.
    `com.uwstudyspots.app` for both platforms in `app.config.js` — change it if
    you restricted your key to something else. (Expo's fallback when these are
    unset is `com.placeholder.appid`, which matches nothing.)
-
-## Boot tracing
-
-Startup is instrumented end to end, so a blank screen says *where* it stopped.
-Every step logs to the Metro terminal and to a green-on-black overlay drawn over
-the app (dev builds only).
-
-```
-[boot +   0ms] entry: bundle evaluating
-[boot +  12ms] app/_layout module evaluating
-[boot +  41ms] RootLayout render
-[boot +  44ms] AppStateProvider render
-[boot +  46ms] useAppFonts called
-[boot +  48ms] location: checking existing permission
-[boot +  52ms] AsyncStorage read start
-[boot +  73ms] hydrated
-[boot + 210ms] useAppFonts result — fraunces=true inter=true
-[boot + 215ms] (tabs)/_layout render
-[boot + 220ms] HomeScreen render
-[boot + 224ms] CampusMap render — provider=google spots=12
-[boot + 480ms] CampusMap onMapReady
-```
-
-Read it by where it stops:
-
-| last line | meaning |
-|---|---|
-| *nothing at all* | the bundle never ran — native crash or Metro never connected |
-| `entry: bundle evaluating` | JS started but Expo Router failed to load |
-| `RootLayout render` and no more | a provider or hook threw; see the red line |
-| stuck before `hydrated` | AsyncStorage never resolved |
-| stuck on `useAppFonts result` false | fonts never loaded |
-| `CampusMap render` with no `onMapReady` | the native map view failed — provider or key |
-
-Maps are additionally wrapped in `MapErrorBoundary`, so a native map failure
-shows an inline message instead of taking the screen down with it.
-
-The moving parts are [src/lib/trace.ts](src/lib/trace.ts),
-[src/components/BootTrace.tsx](src/components/BootTrace.tsx),
-[src/components/MapErrorBoundary.tsx](src/components/MapErrorBoundary.tsx) and
-the custom entry point [index.js](index.js) (`main` in package.json). Remove
-them once startup is trusted; reverting `main` to `expo-router/entry` is the
-only step that is not just deleting a call.
 
 ## Still to wire up
 

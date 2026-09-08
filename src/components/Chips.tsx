@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
   pillLabel: {
     fontFamily: fonts.semi,
     fontSize: 12.5,
+    lineHeight: 16,
     color: colors.muted
   },
   pillLabelActive: {
@@ -137,6 +138,7 @@ const styles = StyleSheet.create({
   chipLabel: {
     fontFamily: fonts.medium,
     fontSize: 11.5,
+    lineHeight: 15,
     color: colors.muted
   },
   chipLabelActive: {
@@ -157,6 +159,7 @@ const styles = StyleSheet.create({
   optionLabel: {
     fontFamily: fonts.semi,
     fontSize: 12.5,
+    lineHeight: 16,
     textAlign: "center"
   }
 });

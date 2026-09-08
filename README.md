@@ -19,7 +19,7 @@ reporting. Bus routing is live, via Transit's public API.
 ## Getting started
 
 ```bash
-npm install --legacy-peer-deps
+npm install
 ```
 
 ```bash
@@ -34,10 +34,6 @@ Fill in `.env.local` — a Transit API key and a Google Maps key at minimum — 
 press `i` / `a`, or scan the QR code with Expo Go. `npm run typecheck` runs
 `tsc --noEmit`.
 
-> **Two setup notes.** `--legacy-peer-deps` is needed because the pre-existing
-> dependency tree has a `react` / `react-dom` peer conflict (react-dom 19.2.8
-> wants a different react than the pinned 19.2.3) — unrelated to anything here,
-> but worth resolving separately.
 >
 > `PROVIDER_GOOGLE` on iOS needs the native Google Maps SDK, which Expo Go does
 > not bundle: iOS in Expo Go falls back to Apple Maps and ignores
@@ -159,6 +155,23 @@ Known limits, all deliberate:
   rotate it from the Transit dashboard if abused.
 - **Rate limits.** The API returns HTTP 429 on bursts, so `src/api/transit.ts`
   caches each point's response for 60s and falls back to that cache on a 429.
+
+### The react-dom override
+
+`package.json` pins `react-dom` to the same version as `react` via `overrides`.
+Without it `npm ci` fails outright — which is how EAS installs, so cloud builds
+break even though a local `npm install` looks fine.
+
+`react-dom` is not a direct dependency: it arrives through Expo Router's web
+dependencies (`@expo/ui`, `vaul`, Radix) and resolves to a version whose peer
+range the SDK-pinned `react` cannot satisfy. Pinning the two together is the
+fix; nothing here renders to the DOM, so the version only has to be coherent.
+
+Re-check after any dependency change with the command EAS actually runs:
+
+```bash
+npm ci --include=dev
+```
 
 ## Builds
 

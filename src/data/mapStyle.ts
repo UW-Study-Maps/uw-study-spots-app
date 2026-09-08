@@ -1,6 +1,16 @@
 import { colors } from "@/theme";
 
 /**
+ * Default camera pitch, in degrees from straight down. **This is the knob to
+ * turn for map tilt.**
+ *
+ * 0 is flat overhead; Google allows up to 45 and clamps toward 0 as you zoom
+ * out, so a value this modest survives at campus zoom but will flatten if the
+ * user pinches right out. Applied by `useMapTilt`.
+ */
+export const MAP_PITCH = 25;
+
+/**
  * Google Maps style for the campus map — a transit-app style basemap: streets
  * and water, nothing else.
  *

@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
-    paddingBottom: 10
+    paddingBottom: 20
   },
   backText: {
     fontFamily: fonts.semi,

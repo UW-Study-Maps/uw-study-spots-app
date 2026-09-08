@@ -5,6 +5,7 @@ import MapView, { Marker } from "react-native-maps";
 import { CAT } from "@/data/categories";
 import { MAP_STYLE } from "@/data/mapStyle";
 import { MAP_PROVIDER } from "@/lib/mapProvider";
+import { useMapTilt } from "@/lib/useMapTilt";
 import { useMarkerTracking } from "@/lib/useMarkerTracking";
 import { useAppState } from "@/state/appState";
 import { colors, fonts, overline } from "@/theme";
@@ -80,11 +81,14 @@ export function CampusMap({
   onSelect: (spot: Spot) => void;
 }) {
   const { statusOf, location } = useAppState();
+  const tilt = useMapTilt();
   const meTracking = useMarkerTracking(`${location.origin.lat},${location.origin.lng}`);
 
   return (
     <View style={styles.container}>
       <MapView
+        ref={tilt.ref}
+        onMapReady={tilt.apply}
         style={StyleSheet.absoluteFill}
         provider={MAP_PROVIDER}
         customMapStyle={MAP_STYLE}

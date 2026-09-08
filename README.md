@@ -97,6 +97,13 @@ padding — and `tracksViewChanges` has to be on briefly for the bitmap to be
 captured at all, then off so panning does not re-rasterise every marker on
 every frame. `useMarkerTracking` handles that.
 
+**Map tilt** is `MAP_PITCH` in [src/data/mapStyle.ts](src/data/mapStyle.ts) —
+degrees from straight down, 0 being flat. It is applied by
+[`useMapTilt`](src/lib/useMapTilt.ts) through `animateCamera`, not through the
+`camera` prop: setting `camera` makes the map ignore `region`, and both maps
+rely on region to frame themselves. Route-card previews are pinned flat, since
+tilt would spend their limited height on perspective rather than on the route.
+
 > **A Google Maps API key is required.** Set `GOOGLE_MAPS_API_KEY` (see
 > `.env.example`) with "Maps SDK for Android" and "Maps SDK for iOS" enabled.
 > Without it the tiles render blank. The variable is deliberately not prefixed

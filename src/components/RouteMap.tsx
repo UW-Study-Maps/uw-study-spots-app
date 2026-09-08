@@ -1,10 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { StyleSheet, View } from "react-native";
 import MapView, { Marker, Polyline, type Region } from "react-native-maps";
 
 import { MAP_STYLE, MAP_STYLE_PREVIEW } from "@/data/mapStyle";
 import { MAP_PROVIDER } from "@/lib/mapProvider";
+import { useMapTilt } from "@/lib/useMapTilt";
 import { useMarkerTracking } from "@/lib/useMarkerTracking";
 import { colors } from "@/theme";
 import type { RouteOption } from "@/types/spot";
@@ -55,8 +56,17 @@ export function RouteMap({
   const region = useMemo(() => regionFor(option), [option]);
   // Markers are rasterised; track only while their appearance is settling.
   const tracking = useMarkerTracking(`${option.key}|${progress}|${compact}`);
-  const rideIndex = option.segments.findIndex((segment) => segment.kind === "ride");
+  // Card previews stay flat: they are small, and tilt would spend their limited
+  // height on perspective rather than on the route.
+  const tilt = useMapTilt(compact ? 0 : undefined);
 
+  // `region` drives the camera, and moving it to frame a different route
+  // resets the tilt, so re-assert it whenever the framing changes.
+  useEffect(() => {
+    tilt.apply();
+  }, [region, tilt]);
+
+  const rideIndex = option.segments.findIndex((segment) => segment.kind === "ride");
   const start = option.segments[0]?.points[0];
   const endSegment = option.segments[option.segments.length - 1];
   const end = endSegment?.points[endSegment.points.length - 1];
@@ -72,6 +82,8 @@ export function RouteMap({
   return (
     <View style={styles.wrap}>
       <MapView
+        ref={tilt.ref}
+        onMapReady={tilt.apply}
         style={StyleSheet.absoluteFill}
         provider={MAP_PROVIDER}
         customMapStyle={compact ? MAP_STYLE_PREVIEW : MAP_STYLE}
@@ -86,7 +98,10 @@ export function RouteMap({
         scrollEnabled={!compact}
         zoomEnabled={!compact}
         rotateEnabled={false}
-        pitchEnabled={false}
+        // Pitch gestures stay off, but the flag has to be on where we want a
+        // tilt at all: with it false the platform ignores the camera's pitch
+        // and renders flat regardless.
+        pitchEnabled={!compact}
         pointerEvents={compact ? "none" : "auto"}
       >
         {option.segments.map((segment, index) => {

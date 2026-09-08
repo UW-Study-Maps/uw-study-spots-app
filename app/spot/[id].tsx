@@ -1,10 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Animated, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { CAT, CROWD_ORDER } from "@/data/categories";
 import { getSpot } from "@/data/spots";
 import { walkLabel } from "@/lib/routes";
+import { useSheetEntrance } from "@/lib/useSheetEntrance";
 import { useAppState } from "@/state/appState";
 import { colors, fonts, overline } from "@/theme";
 
@@ -14,6 +15,7 @@ export default function SpotDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { statusOf, isSaved, toggleSaved, reports, location } = useAppState();
+  const entrance = useSheetEntrance();
 
   const spot = getSpot(id);
   if (!spot) {
@@ -43,7 +45,7 @@ export default function SpotDetailScreen() {
     <View style={styles.backdrop}>
       <Pressable style={StyleSheet.absoluteFill} onPress={() => router.back()} />
 
-      <View style={styles.sheet}>
+      <Animated.View style={[styles.sheet, entrance]}>
         <View style={styles.grabberWrap}>
           <View style={styles.grabber} />
         </View>
@@ -148,7 +150,7 @@ export default function SpotDetailScreen() {
             ))}
           </View>
         </ScrollView>
-      </View>
+      </Animated.View>
     </View>
   );
 }

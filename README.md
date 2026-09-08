@@ -53,6 +53,12 @@ app/                    Expo Router routes (screens)
   nav/[id].tsx          Turn-by-turn navigation
   report/[id].tsx       Crowd report sheet
   _layout.tsx           Font loading, onboarding gate, root stack
+
+The spot and report sheets are `transparentModal` screens, so the screen that
+opened them stays mounted and visible underneath. That needs an explicit
+`contentStyle: { backgroundColor: "transparent" }` per screen — the stack's
+default contentStyle paints every screen opaque, which otherwise makes a
+transparent modal look like a separate screen.
 src/
   api/transit.ts        Transit public API client, bus trip matching, route shapes
   api/routing.ts        Valhalla client for walking and cycling paths

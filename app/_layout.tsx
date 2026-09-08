@@ -17,6 +17,13 @@ import { colors } from "@/theme";
  * dismissed, and the app sits on a blank screen forever. So the Stack is always
  * mounted and the pre-app states are layered over it.
  */
+/** Shared options for the two bottom sheets — see the comment at their usage. */
+const SHEET_OPTIONS = {
+  presentation: "transparentModal",
+  animation: "fade",
+  contentStyle: { backgroundColor: "transparent" }
+} as const;
+
 function RootNavigator() {
   const { hydrated, onboarded } = useAppState();
   const fontsLoaded = useAppFonts();
@@ -26,8 +33,17 @@ function RootNavigator() {
     <View style={styles.root}>
       <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bg } }}>
         <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="spot/[id]" options={{ presentation: "transparentModal" }} />
-        <Stack.Screen name="report/[id]" options={{ presentation: "transparentModal" }} />
+        {/*
+          Both sheets sit over the screen that opened them. `transparentModal`
+          keeps that screen mounted underneath, but only shows it if the modal
+          itself is see-through — and the stack's default contentStyle paints
+          every screen with the app background, which is what made these look
+          like separate screens. Each one has to opt back out to transparent.
+          `fade` because a slide would animate the dimmed backdrop in from the
+          edge, which reads as a new screen rather than an overlay.
+        */}
+        <Stack.Screen name="spot/[id]" options={SHEET_OPTIONS} />
+        <Stack.Screen name="report/[id]" options={SHEET_OPTIONS} />
         <Stack.Screen name="routes/[id]" />
         <Stack.Screen name="nav/[id]" />
       </Stack>

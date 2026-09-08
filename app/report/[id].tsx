@@ -1,10 +1,11 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Animated, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { OptionButton } from "@/components/Chips";
 import { CROWD_ICON, CROWD_ORDER, NOISE_OPTS, OUTLET_OPTS, ST } from "@/data/categories";
 import { getSpot } from "@/data/spots";
+import { useSheetEntrance } from "@/lib/useSheetEntrance";
 import { useAppState } from "@/state/appState";
 import { colors, fonts, overline } from "@/theme";
 import type { CrowdLevel, NoiseLevel, OutletLevel } from "@/types/spot";
@@ -13,6 +14,7 @@ export default function ReportScreen() {
   const { id, context } = useLocalSearchParams<{ id: string; context?: string }>();
   const router = useRouter();
   const { submitReport, showToast } = useAppState();
+  const entrance = useSheetEntrance();
 
   const [crowd, setCrowd] = useState<CrowdLevel | null>(null);
   const [noise, setNoise] = useState<NoiseLevel | null>(null);
@@ -50,7 +52,7 @@ export default function ReportScreen() {
     <View style={styles.backdrop}>
       <Pressable style={StyleSheet.absoluteFill} onPress={dismiss} />
 
-      <View style={styles.sheet}>
+      <Animated.View style={[styles.sheet, entrance]}>
         <View style={styles.grabberWrap}>
           <View style={styles.grabber} />
         </View>
@@ -121,7 +123,7 @@ export default function ReportScreen() {
             <Text style={styles.dismissText}>Not now</Text>
           </Pressable>
         </ScrollView>
-      </View>
+      </Animated.View>
     </View>
   );
 }

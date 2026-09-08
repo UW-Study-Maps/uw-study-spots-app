@@ -1,252 +1,383 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
-import { Linking, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
-import { getBusyness, reportBusyness } from "@/api/busyness";
-import { CATEGORY_META } from "@/data/categories";
-import { STUDY_SPOTS } from "@/data/spots";
-import { getDeviceId } from "@/lib/deviceId";
-import { colors } from "@/theme";
-import type { BusynessLevel, BusynessStatus } from "@/types/spot";
+import { CAT, CROWD_ORDER } from "@/data/categories";
+import { getSpot } from "@/data/spots";
+import { walkLabel } from "@/lib/routes";
+import { useAppState } from "@/state/appState";
+import { colors, fonts, overline } from "@/theme";
 
-const BUSYNESS_META: Record<BusynessLevel, { label: string; icon: string }> = {
-  empty: { label: "Empty", icon: "checkmark-circle" },
-  "some-seats": { label: "Some seats", icon: "person" },
-  busy: { label: "Busy", icon: "people" },
-  full: { label: "Full", icon: "warning" }
-};
-const BUSYNESS_ORDER: BusynessLevel[] = ["empty", "some-seats", "busy", "full"];
+const BAR_HEIGHT = 36;
 
 export default function SpotDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const spot = STUDY_SPOTS.find((s) => s.id === id);
+  const router = useRouter();
+  const { statusOf, isSaved, toggleSaved, reports, location } = useAppState();
 
-  const [busyness, setBusyness] = useState<BusynessStatus | null>(null);
-  const [submitting, setSubmitting] = useState(false);
-
-  useEffect(() => {
-    if (!spot) return;
-    getBusyness(spot.id)
-      .then(setBusyness)
-      .catch(() => setBusyness(null));
-  }, [spot?.id]);
-
+  const spot = getSpot(id);
   if (!spot) {
     return (
-      <View style={styles.center}>
-        <Text>Spot not found.</Text>
-      </View>
+      <Pressable style={styles.backdrop} onPress={() => router.back()}>
+        <View style={styles.sheet}>
+          <Text style={styles.notFound}>That spot no longer exists.</Text>
+        </View>
+      </Pressable>
     );
   }
 
-  const meta = CATEGORY_META[spot.category];
-  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-    `${spot.name}, ${spot.address}`
-  )}`;
+  const cat = CAT[spot.cat];
+  const status = statusOf(spot);
+  const report = reports[spot.id];
+  const saved = isSaved(spot.id);
+  const totalVotes = spot.votes.reduce((a, b) => a + b, 0);
+  const peakVotes = Math.max(1, ...spot.votes);
 
-  async function submitReport(level: BusynessLevel) {
-    if (!spot) return;
-    setSubmitting(true);
-    try {
-      const deviceId = await getDeviceId();
-      const result = await reportBusyness(spot.id, level, deviceId);
-      if (result.ok) {
-        const updated = await getBusyness(spot.id);
-        setBusyness(updated);
-      }
-    } finally {
-      setSubmitting(false);
-    }
-  }
+  const statusMeta = report
+    ? "your report, just now"
+    : spot.age
+      ? `${spot.age} · ${totalVotes} ${totalVotes === 1 ? "report" : "reports"} today`
+      : "be the first to check in";
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <View style={[styles.hero, { backgroundColor: meta.color }]}>
-        <Ionicons name={meta.icon as any} size={40} color="#fff" />
-      </View>
+    <View style={styles.backdrop}>
+      <Pressable style={StyleSheet.absoluteFill} onPress={() => router.back()} />
 
-      <View style={styles.badgeRow}>
-        <Text style={[styles.badge, { color: meta.color }]}>{meta.label}</Text>
-        <Text style={styles.badge}>{spot.affiliation}</Text>
-      </View>
-
-      <Text style={styles.name}>{spot.name}</Text>
-      <View style={styles.addressRow}>
-        <Ionicons name="location" size={14} color={colors.textMuted} />
-        <Text style={styles.address}>{spot.address}</Text>
-      </View>
-
-      <Pressable
-        style={styles.directionsBtn}
-        onPress={() => Linking.openURL(mapsUrl)}
-      >
-        <Ionicons name="navigate" size={16} color="#fff" />
-        <Text style={styles.directionsText}>Get Directions</Text>
-      </Pressable>
-
-      <Text style={styles.sectionLabel}>How busy is it right now?</Text>
-      <View style={styles.busynessBox}>
-        {busyness?.level ? (
-          <Text style={styles.busynessStatus}>
-            {BUSYNESS_META[busyness.level].label} · {busyness.recentCount}{" "}
-            {busyness.recentCount === 1 ? "report" : "reports"}
-          </Text>
-        ) : (
-          <Text style={styles.busynessStatus}>No recent reports — be the first to check in.</Text>
-        )}
-        <View style={styles.busynessButtons}>
-          {BUSYNESS_ORDER.map((level) => (
-            <Pressable
-              key={level}
-              style={styles.busynessBtn}
-              disabled={submitting}
-              onPress={() => submitReport(level)}
-            >
-              <Ionicons name={BUSYNESS_META[level].icon as any} size={14} color={colors.text} />
-              <Text style={styles.busynessBtnText}>{BUSYNESS_META[level].label}</Text>
-            </Pressable>
-          ))}
+      <View style={styles.sheet}>
+        <View style={styles.grabberWrap}>
+          <View style={styles.grabber} />
         </View>
-      </View>
 
-      <Text style={styles.sectionLabel}>About this spot</Text>
-      <Text style={styles.description}>{spot.description}</Text>
+        <ScrollView contentContainerStyle={styles.content}>
+          <View style={styles.headRow}>
+            <View style={[styles.hero, { backgroundColor: cat.color }]}>
+              <Ionicons name={cat.icon as never} size={17} color="#fff" />
+            </View>
+            <View style={styles.headBody}>
+              <View style={[styles.badge, { backgroundColor: `${cat.color}18` }]}>
+                <Text style={[styles.badgeText, { color: cat.color }]}>
+                  {spot.cat.toUpperCase()}
+                </Text>
+              </View>
+              <Text style={styles.name}>{spot.name}</Text>
+              <Text style={styles.address}>{spot.address}</Text>
+            </View>
+            <Pressable
+              onPress={() => toggleSaved(spot.id)}
+              style={[styles.saveBtn, saved && styles.saveBtnActive]}
+            >
+              <Ionicons
+                name={saved ? "bookmark" : "bookmark-outline"}
+                size={14}
+                color={saved ? colors.uwRed : colors.faint}
+              />
+            </Pressable>
+          </View>
 
-      <Text style={styles.sectionLabel}>Tags</Text>
-      <View style={styles.tagsRow}>
-        {spot.tags.map((tag) => (
-          <Text key={tag} style={styles.tag}>
-            {tag}
-          </Text>
-        ))}
+          <View style={styles.actions}>
+            <Pressable
+              style={styles.primaryBtn}
+              onPress={() => router.push(`/routes/${spot.id}`)}
+            >
+              <Ionicons name="navigate" size={14} color="#fff" />
+              <Text style={styles.primaryBtnText}>Get there · {walkLabel(location.origin, spot)}</Text>
+            </Pressable>
+            <Pressable
+              style={styles.secondaryBtn}
+              onPress={() => router.push(`/report/${spot.id}`)}
+            >
+              <Text style={styles.secondaryBtnText}>Report</Text>
+            </Pressable>
+          </View>
+
+          <View style={styles.panel}>
+            <Text style={styles.panelTitle}>How busy is it right now?</Text>
+
+            <View style={styles.statusRow}>
+              <View style={[styles.statusDot, { backgroundColor: status.color }]} />
+              <Text style={styles.statusText}>
+                <Text style={styles.statusStrong}>{status.label}</Text>
+                <Text style={styles.statusMeta}> · {statusMeta}</Text>
+              </Text>
+            </View>
+
+            <View style={styles.bars}>
+              {CROWD_ORDER.map((level, index) => {
+                const votes = spot.votes[index];
+                const isCurrent = status.n === index;
+                return (
+                  <View key={level} style={styles.barCol}>
+                    <View style={styles.barTrack}>
+                      <View
+                        style={[
+                          styles.barFill,
+                          {
+                            height: Math.max(6, Math.round((votes / peakVotes) * BAR_HEIGHT)),
+                            backgroundColor: isCurrent ? status.color : colors.barIdle
+                          }
+                        ]}
+                      />
+                    </View>
+                    <Text style={styles.barLabel}>
+                      {level === "some" ? "Some" : level[0].toUpperCase() + level.slice(1)}
+                    </Text>
+                  </View>
+                );
+              })}
+            </View>
+
+            <View style={styles.facts}>
+              <View style={styles.fact}>
+                <Ionicons name="volume-low" size={12} color={colors.faint} />
+                <Text style={styles.factText}>{report?.noise ?? spot.noise}</Text>
+              </View>
+              <View style={styles.fact}>
+                <Ionicons name="flash" size={12} color={colors.faint} />
+                <Text style={styles.factText}>{report?.outlets ?? spot.outlets}</Text>
+              </View>
+            </View>
+          </View>
+
+          <Text style={styles.desc}>{spot.desc}</Text>
+
+          <View style={styles.tags}>
+            {spot.tags.map((tag) => (
+              <Text key={tag} style={styles.tag}>
+                {tag}
+              </Text>
+            ))}
+          </View>
+        </ScrollView>
       </View>
-    </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  backdrop: {
     flex: 1,
-    backgroundColor: colors.background
+    justifyContent: "flex-end",
+    backgroundColor: "rgba(29,26,23,0.34)"
+  },
+  sheet: {
+    maxHeight: "82%",
+    backgroundColor: colors.surface,
+    borderTopLeftRadius: 22,
+    borderTopRightRadius: 22
+  },
+  grabberWrap: {
+    alignItems: "center",
+    paddingTop: 10,
+    paddingBottom: 4
+  },
+  grabber: {
+    width: 38,
+    height: 4,
+    borderRadius: 99,
+    backgroundColor: colors.border
   },
   content: {
-    padding: 20,
-    paddingBottom: 40
+    paddingHorizontal: 22,
+    paddingTop: 6,
+    paddingBottom: 34
   },
-  center: {
-    flex: 1,
+  notFound: {
+    fontFamily: fonts.body,
+    fontSize: 14,
+    color: colors.muted,
+    padding: 30,
+    textAlign: "center"
+  },
+  headRow: {
+    flexDirection: "row",
+    gap: 13,
+    alignItems: "flex-start"
+  },
+  hero: {
+    width: 46,
+    height: 46,
+    borderRadius: 14,
     alignItems: "center",
     justifyContent: "center"
   },
-  hero: {
-    height: 100,
-    borderRadius: 16,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 16
-  },
-  badgeRow: {
-    flexDirection: "row",
-    gap: 12,
-    marginBottom: 6
+  headBody: {
+    flex: 1,
+    minWidth: 0
   },
   badge: {
-    fontSize: 12,
-    fontWeight: "600",
-    color: colors.textMuted
+    alignSelf: "flex-start",
+    borderRadius: 999,
+    paddingVertical: 4,
+    paddingHorizontal: 9
+  },
+  badgeText: {
+    fontFamily: fonts.bold,
+    fontSize: 9.5,
+    letterSpacing: 0.6
   },
   name: {
-    fontSize: 22,
-    fontWeight: "700",
-    color: colors.text,
-    marginBottom: 6
-  },
-  addressRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-    marginBottom: 16
+    fontFamily: fonts.displayS,
+    fontSize: 21,
+    lineHeight: 25,
+    color: colors.ink,
+    marginTop: 7,
+    marginBottom: 5
   },
   address: {
-    fontSize: 13,
-    color: colors.textMuted
+    fontFamily: fonts.body,
+    fontSize: 12.5,
+    lineHeight: 18,
+    color: colors.muted
   },
-  directionsBtn: {
+  saveBtn: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  saveBtnActive: {
+    backgroundColor: colors.uwRedTint
+  },
+  actions: {
+    flexDirection: "row",
+    gap: 9,
+    marginTop: 16,
+    marginBottom: 18
+  },
+  primaryBtn: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     gap: 8,
-    backgroundColor: colors.uwRed,
-    borderRadius: 12,
-    paddingVertical: 12,
-    marginBottom: 24
+    backgroundColor: colors.ink,
+    borderRadius: 999,
+    paddingVertical: 13
   },
-  directionsText: {
-    color: "#fff",
-    fontWeight: "600",
-    fontSize: 14
+  primaryBtnText: {
+    fontFamily: fonts.semi,
+    fontSize: 14,
+    color: "#fff"
   },
-  sectionLabel: {
-    fontSize: 12,
-    fontWeight: "700",
-    color: colors.textMuted,
-    textTransform: "uppercase",
-    letterSpacing: 0.5,
-    marginBottom: 8,
-    marginTop: 4
-  },
-  busynessBox: {
-    backgroundColor: colors.surface,
+  secondaryBtn: {
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: 12,
-    padding: 14,
-    marginBottom: 20,
-    gap: 10
+    backgroundColor: colors.surface,
+    borderRadius: 999,
+    paddingVertical: 13,
+    paddingHorizontal: 16,
+    justifyContent: "center"
   },
-  busynessStatus: {
-    fontSize: 13,
-    color: colors.text
+  secondaryBtnText: {
+    fontFamily: fonts.semi,
+    fontSize: 13.5,
+    color: colors.muted
   },
-  busynessButtons: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 8
+  panel: {
+    backgroundColor: colors.panel,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 14,
+    paddingVertical: 14,
+    paddingHorizontal: 15
   },
-  busynessBtn: {
+  panelTitle: {
+    ...overline,
+    marginBottom: 10
+  },
+  statusRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 4,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 999,
-    paddingVertical: 6,
-    paddingHorizontal: 10
+    gap: 9,
+    marginBottom: 11
   },
-  busynessBtnText: {
+  statusDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5
+  },
+  statusText: {
+    flex: 1,
+    fontSize: 13.5
+  },
+  statusStrong: {
+    fontFamily: fonts.semi,
+    color: colors.ink
+  },
+  statusMeta: {
+    fontFamily: fonts.body,
+    color: colors.faint
+  },
+  bars: {
+    flexDirection: "row",
+    gap: 6
+  },
+  barCol: {
+    flex: 1
+  },
+  barTrack: {
+    height: BAR_HEIGHT,
+    backgroundColor: colors.border,
+    borderRadius: 6,
+    justifyContent: "flex-end",
+    overflow: "hidden"
+  },
+  barFill: {
+    width: "100%"
+  },
+  barLabel: {
+    fontFamily: fonts.body,
+    fontSize: 9.5,
+    color: colors.faint,
+    textAlign: "center",
+    marginTop: 5
+  },
+  facts: {
+    flexDirection: "row",
+    gap: 16,
+    marginTop: 13,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    borderStyle: "dashed"
+  },
+  fact: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6
+  },
+  factText: {
+    fontFamily: fonts.body,
     fontSize: 12,
-    color: colors.text
+    color: colors.muted
   },
-  description: {
-    fontSize: 14,
-    color: colors.text,
-    lineHeight: 20,
-    marginBottom: 20
+  desc: {
+    fontFamily: fonts.body,
+    fontSize: 13.5,
+    lineHeight: 22,
+    color: colors.ink,
+    marginTop: 16,
+    marginBottom: 14
   },
-  tagsRow: {
+  tags: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 8
+    gap: 6
   },
   tag: {
-    fontSize: 12,
-    color: colors.textMuted,
-    backgroundColor: colors.surface,
+    fontFamily: fonts.semi,
+    fontSize: 11.5,
+    color: colors.muted,
+    backgroundColor: colors.panel,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: 999,
-    paddingVertical: 4,
-    paddingHorizontal: 10
+    paddingVertical: 5,
+    paddingHorizontal: 11,
+    overflow: "hidden"
   }
 });

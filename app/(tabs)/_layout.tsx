@@ -1,38 +1,39 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Link, Tabs } from "expo-router";
-import { Pressable } from "react-native";
+import { Tabs } from "expo-router";
 
-import { colors } from "@/theme";
+import { trace } from "@/lib/trace";
+import { colors, fonts } from "@/theme";
 
 export default function TabsLayout() {
+  trace("(tabs)/_layout render");
   return (
     <Tabs
       screenOptions={{
-        headerTintColor: colors.text,
+        headerShown: false,
         tabBarActiveTintColor: colors.uwRed,
-        tabBarInactiveTintColor: colors.textMuted
+        tabBarInactiveTintColor: colors.faint,
+        tabBarLabelStyle: { fontFamily: fonts.semi, fontSize: 10 },
+        tabBarStyle: {
+          backgroundColor: colors.surface,
+          borderTopColor: colors.border
+        }
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: "Spots",
-          tabBarIcon: ({ color, size }) => <Ionicons name="list" size={size} color={color} />,
-          headerRight: () => (
-            <Link href="/suggest" asChild>
-              <Pressable hitSlop={8} style={{ marginRight: 16 }}>
-                <Ionicons name="add-circle-outline" size={24} color={colors.uwRed} />
-              </Pressable>
-            </Link>
+          title: "Map",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="map" size={size} color={color} />
           )
         }}
       />
       <Tabs.Screen
-        name="map"
+        name="saved"
         options={{
-          title: "Map",
+          title: "Saved",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="map" size={size} color={color} />
+            <Ionicons name="bookmark" size={size} color={color} />
           )
         }}
       />

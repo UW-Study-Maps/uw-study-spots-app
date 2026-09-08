@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "uw-study-spots-app",
+    "name": "UW Study Spots",
     "slug": "uw-study-spots-app",
+    "scheme": "uwstudyspots",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -20,6 +21,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-router"
+    ]
   }
 }

@@ -1,24 +1,21 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useRef } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
 import { CAT } from "@/data/categories";
 import { MAP_STYLE } from "@/data/mapStyle";
 import { MAP_PROVIDER } from "@/lib/mapProvider";
+import { useCenterOnUser } from "@/lib/useCenterOnUser";
 import { useMapTilt } from "@/lib/useMapTilt";
 import { useMarkerTracking } from "@/lib/useMarkerTracking";
 import { useAppState } from "@/state/appState";
 import { colors, fonts, overline } from "@/theme";
 import type { Spot, StatusMeta } from "@/types/spot";
 
-// Frames the isthmus campus — Union South through the Memorial Union Terrace.
-// Tight enough that local streets are already drawn at first paint.
-const INITIAL_REGION = {
-  latitude: 43.0745,
-  longitude: -89.4045,
-  latitudeDelta: 0.016,
-  longitudeDelta: 0.016
-};
+// Roughly a fifteen-minute walk across, so local streets are already drawn at
+// first paint.
+const SPAN_DEGREES = 0.016;
 
 /**
  * One spot on the map: a category-colored circle with a crowding dot.
@@ -82,17 +79,31 @@ export function CampusMap({
 }) {
   const { statusOf, location } = useAppState();
   const tilt = useMapTilt();
+  const centering = useCenterOnUser(tilt.ref, location);
   const meTracking = useMarkerTracking(`${location.origin.lat},${location.origin.lng}`);
+
+  // `initialRegion` is captured once, so this must not change identity when a
+  // later fix moves the origin — `useCenterOnUser` animates to that instead.
+  const initialRegion = useRef({
+    latitude: location.origin.lat,
+    longitude: location.origin.lng,
+    latitudeDelta: SPAN_DEGREES,
+    longitudeDelta: SPAN_DEGREES
+  }).current;
 
   return (
     <View style={styles.container}>
       <MapView
         ref={tilt.ref}
-        onMapReady={tilt.apply}
+        onMapReady={() => {
+          tilt.apply();
+          centering.onMapReady();
+        }}
+        onRegionChangeComplete={centering.onRegionChangeComplete}
         style={StyleSheet.absoluteFill}
         provider={MAP_PROVIDER}
         customMapStyle={MAP_STYLE}
-        initialRegion={INITIAL_REGION}
+        initialRegion={initialRegion}
         showsPointsOfInterests={false}
         showsBuildings={false}
         showsIndoors={false}

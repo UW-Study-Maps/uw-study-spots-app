@@ -97,6 +97,16 @@ padding — and `tracksViewChanges` has to be on briefly for the bitmap to be
 captured at all, then off so panning does not re-rasterise every marker on
 every frame. `useMarkerTracking` handles that.
 
+**The camera starts on the user.** `initialRegion` is read once at mount, and
+the location fix is still pending then, so the first frame is the campus
+fallback and [`useCenterOnUser`](src/lib/useCenterOnUser.ts) animates to the
+real position when it lands. It centres once, only after the map is ready — the
+fix often arrives first, and animating an unmounted map would silently spend
+that one move — and never after the user has panned, which
+`onRegionChangeComplete`'s `details.isGesture` distinguishes from the app's own
+camera moves. Permission refused means no recentre: the map is already framed
+on the fallback.
+
 **Map tilt** is `MAP_PITCH` in [src/data/mapStyle.ts](src/data/mapStyle.ts) —
 degrees from straight down, 0 being flat. It is applied by
 [`useMapTilt`](src/lib/useMapTilt.ts) through `animateCamera`, not through the

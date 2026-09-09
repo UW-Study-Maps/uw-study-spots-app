@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   pillRow: {
     gap: 7,
     paddingTop: 11,
-    paddingBottom: 3
+    paddingBottom: 10
   },
   chipRow: {
     gap: 6,

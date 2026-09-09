@@ -9,6 +9,7 @@ import {
   type ReactNode
 } from "react";
 
+import { fetchUpdateLog } from "@/api/studySpots";
 import { ST } from "@/data/categories";
 import { useDeviceLocation, type DeviceLocation } from "@/lib/useDeviceLocation";
 import type { CrowdLevel, NoiseLevel, OutletLevel, SpotReport, StatusMeta } from "@/types/spot";
@@ -16,6 +17,7 @@ import type { Spot } from "@/types/spot";
 
 const SAVED_KEY = "uw-study-spots-saved";
 const ONBOARD_KEY = "uw-study-spots-onboarded";
+const UPDATE_SEEN_KEY = "uw-study-spots-last-seen-update";
 
 interface AppState {
   /** Device position (or campus fallback) that every route is planned from. */
@@ -38,6 +40,11 @@ interface AppState {
 
   toast: string | null;
   showToast: (message: string) => void;
+
+  /** True once a fresher "Updates" log entry exists than the last one seen. */
+  hasNewUpdate: boolean;
+  /** Call once the Updates screen has loaded the log, to clear the badge. */
+  markUpdatesSeen: (latestTs: number) => void;
 }
 
 const AppStateContext = createContext<AppState | null>(null);
@@ -48,6 +55,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const [reports, setReports] = useState<Record<string, SpotReport>>({});
   const [toast, setToast] = useState<string | null>(null);
+  const [hasNewUpdate, setHasNewUpdate] = useState(false);
   const location = useDeviceLocation();
 
   useEffect(() => {
@@ -101,6 +109,35 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     setReports((current) => ({ ...current, [spotId]: report }));
   }, []);
 
+  const markUpdatesSeen = useCallback((latestTs: number) => {
+    setHasNewUpdate(false);
+    AsyncStorage.setItem(UPDATE_SEEN_KEY, String(latestTs)).catch(() => {});
+  }, []);
+
+  // One-shot check on launch, mirroring the website's checkForNewUpdate() —
+  // no polling, just "is there something newer than what this device last saw."
+  // Silently does nothing if the API isn't configured or unreachable.
+  useEffect(() => {
+    if (!hydrated) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const [entries, seenRaw] = await Promise.all([
+          fetchUpdateLog(),
+          AsyncStorage.getItem(UPDATE_SEEN_KEY)
+        ]);
+        if (cancelled || !entries.length) return;
+        const lastSeen = Number(seenRaw) || 0;
+        if (entries[0].ts > lastSeen) setHasNewUpdate(true);
+      } catch {
+        // Not configured, offline, or the request timed out — no badge either way.
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [hydrated]);
+
   const value = useMemo<AppState>(
     () => ({
       location,
@@ -114,7 +151,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       submitReport,
       statusOf: (spot) => ST[reports[spot.id]?.crowd ?? spot.status],
       toast,
-      showToast
+      showToast,
+      hasNewUpdate,
+      markUpdatesSeen
     }),
     [
       location,
@@ -126,7 +165,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       reports,
       submitReport,
       toast,
-      showToast
+      showToast,
+      hasNewUpdate,
+      markUpdatesSeen
     ]
   );
 

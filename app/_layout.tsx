@@ -44,6 +44,7 @@ function RootNavigator() {
         */}
         <Stack.Screen name="spot/[id]" options={SHEET_OPTIONS} />
         <Stack.Screen name="report/[id]" options={SHEET_OPTIONS} />
+        <Stack.Screen name="updates" options={SHEET_OPTIONS} />
         <Stack.Screen name="routes/[id]" />
         <Stack.Screen name="nav/[id]" />
       </Stack>

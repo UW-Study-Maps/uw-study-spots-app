@@ -313,6 +313,22 @@ with to the Maps key's Android restrictions.
    you restricted your key to something else. (Expo's fallback when these are
    unset is `com.placeholder.appid`, which matches nothing.)
 
+## The Updates log
+
+The website's bullhorn button shows a feed of owner responses to feedback and
+spot suggestions (`GET /api/log` on `uw-study-spots-map`, backed by Cloudflare
+KV). The app has the same feed at [app/updates.tsx](app/updates.tsx), fetched
+by [src/api/studySpots.ts](src/api/studySpots.ts) and surfaced by a megaphone
+button on the home screen — a small dot marks it unread, the same "last seen
+timestamp in local storage" approach as the website's `checkForNewUpdate()`,
+just via `AsyncStorage` instead of `localStorage`.
+
+Set `EXPO_PUBLIC_STUDY_SPOTS_API_URL` in `.env.local` to the website's deployed
+base URL (see `.env.example`). Unlike Valhalla there's no public instance to
+fall back to, so leaving it blank just means the button never shows a
+notification and the sheet reports the feature as unavailable — the same
+"absent, not broken" pattern as a missing Transit key.
+
 ## Still to wire up
 
 1. **Crowd reports are session-only.** [src/state/appState.tsx](src/state/appState.tsx)
@@ -333,4 +349,5 @@ with to the Maps key's Android restrictions.
 
 This is a separate repo/app from `uw-study-spots-map`. They share the category
 colors/labels and the study spot dataset (currently duplicated by hand), and
-will share the crowd-report backend once step 1 above is done.
+now also the Updates log (see above); they will share the crowd-report backend
+too once step 1 above is done.

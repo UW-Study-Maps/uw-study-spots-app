@@ -11,11 +11,13 @@ import { SpotCard } from "@/components/SpotCard";
 import { Toast } from "@/components/Toast";
 import { CAT, CATS, TAGS } from "@/data/categories";
 import { SPOTS } from "@/data/spots";
+import { useAppState } from "@/state/appState";
 import { colors, fonts, overline } from "@/theme";
 import type { Category, Spot } from "@/types/spot";
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { hasNewUpdate } = useAppState();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<Category | "All">("All");
   const [tag, setTag] = useState<string | null>(null);
@@ -61,6 +63,16 @@ export default function HomeScreen() {
             onPress={() => setMapView((current) => !current)}
           >
             <Ionicons name={mapView ? "list" : "map"} size={17} color={colors.muted} />
+          </Pressable>
+          <Pressable
+            style={styles.viewToggle}
+            hitSlop={6}
+            accessibilityRole="button"
+            accessibilityLabel="Updates"
+            onPress={() => router.push("/updates")}
+          >
+            <Ionicons name="megaphone-outline" size={17} color={colors.muted} />
+            {hasNewUpdate ? <View style={styles.updateDot} /> : null}
           </Pressable>
         </View>
 
@@ -170,6 +182,17 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     alignItems: "center",
     justifyContent: "center"
+  },
+  updateDot: {
+    position: "absolute",
+    top: 8,
+    right: 9,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: colors.uwRed,
+    borderWidth: 1.5,
+    borderColor: colors.surface
   },
   pillRow: {
     gap: 7,

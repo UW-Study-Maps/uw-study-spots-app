@@ -62,7 +62,8 @@ module.exports = {
       // empty — the real values come from .env.local locally, and from EAS
       // environment variables in cloud builds.
       transitApiKey: "",
-      valhallaUrl: ""
+      valhallaUrl: "",
+      studySpotsApiUrl: ""
     }
   }
 };

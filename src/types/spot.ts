@@ -24,11 +24,6 @@ export interface Spot {
   address: string;
   lat: number;
   lng: number;
-  status: StatusKey;
-  /** Human age of the newest report, e.g. "4 min ago"; empty when none. */
-  age: string;
-  /** Report tallies in CROWD_ORDER order: [empty, some, busy, full]. */
-  votes: [number, number, number, number];
   noise: NoiseLevel;
   outlets: OutletLevel;
   tags: string[];

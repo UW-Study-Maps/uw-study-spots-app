@@ -6,7 +6,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { MapErrorBoundary } from "@/components/MapErrorBoundary";
 import { RouteMap } from "@/components/RouteMap";
-import { getSpot } from "@/data/spots";
 import { planRoutes } from "@/lib/routes";
 import { useAppState } from "@/state/appState";
 import { colors, fonts } from "@/theme";
@@ -20,8 +19,8 @@ const STEP_INTERVAL_MS = 6000;
 export default function NavScreen() {
   const { id, mode } = useLocalSearchParams<{ id: string; mode?: TravelMode }>();
   const router = useRouter();
+  const { location, getSpot } = useAppState();
   const spot = getSpot(id);
-  const { location } = useAppState();
 
   const [option, setOption] = useState<RouteOption | null>(null);
   const [step, setStep] = useState(0);

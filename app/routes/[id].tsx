@@ -6,7 +6,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { MapErrorBoundary } from "@/components/MapErrorBoundary";
 import { RouteMap } from "@/components/RouteMap";
-import { getSpot } from "@/data/spots";
 import { planRoutes, type RoutePlan } from "@/lib/routes";
 import { useAppState } from "@/state/appState";
 import { colors, fonts, overline } from "@/theme";
@@ -19,8 +18,8 @@ const REFRESH_INTERVAL_MS = 20_000;
 export default function RoutesScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+  const { location, getSpot } = useAppState();
   const spot = getSpot(id);
-  const { location } = useAppState();
 
   const [plan, setPlan] = useState<RoutePlan | null>(null);
   const [mode, setMode] = useState<TravelMode | null>(null);

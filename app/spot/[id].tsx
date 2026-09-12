@@ -1,21 +1,36 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect } from "react";
 import { Animated, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
-import { CAT, CROWD_ORDER } from "@/data/categories";
-import { getSpot } from "@/data/spots";
+import { FeedbackSection } from "@/components/FeedbackSection";
+import { CAT } from "@/data/categories";
+import { formatRelativeTime } from "@/lib/formatDateTime";
 import { walkLabel } from "@/lib/routes";
 import { useSheetEntrance } from "@/lib/useSheetEntrance";
 import { useAppState } from "@/state/appState";
 import { colors, fonts, overline } from "@/theme";
 
-const BAR_HEIGHT = 36;
-
 export default function SpotDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
-  const { statusOf, isSaved, toggleSaved, reports, location } = useAppState();
+  const {
+    getSpot,
+    statusOf,
+    isSaved,
+    toggleSaved,
+    reports,
+    location,
+    liveBusyness,
+    refreshBusyness
+  } = useAppState();
   const entrance = useSheetEntrance();
+
+  // Freshest single-spot read, same as the website's drawer-open refresh —
+  // the batched fetch on app launch can be a few minutes stale by now.
+  useEffect(() => {
+    if (id) refreshBusyness(id);
+  }, [id, refreshBusyness]);
 
   const spot = getSpot(id);
   if (!spot) {
@@ -31,14 +46,16 @@ export default function SpotDetailScreen() {
   const cat = CAT[spot.cat];
   const status = statusOf(spot);
   const report = reports[spot.id];
+  const live = liveBusyness[spot.id];
   const saved = isSaved(spot.id);
-  const totalVotes = spot.votes.reduce((a, b) => a + b, 0);
-  const peakVotes = Math.max(1, ...spot.votes);
+  // Not a structured field — every spot carries one of these two as a tag,
+  // same as the website's raw data, which the app already mirrors that way.
+  const isOffCampus = spot.tags.includes("Off-Campus");
 
   const statusMeta = report
     ? "your report, just now"
-    : spot.age
-      ? `${spot.age} · ${totalVotes} ${totalVotes === 1 ? "report" : "reports"} today`
+    : live?.level && live.reportedAt
+      ? `${formatRelativeTime(live.reportedAt)} · ${live.recentCount} ${live.recentCount === 1 ? "report" : "reports"}`
       : "be the first to check in";
 
   return (
@@ -56,10 +73,24 @@ export default function SpotDetailScreen() {
               <Ionicons name={cat.icon as never} size={17} color="#fff" />
             </View>
             <View style={styles.headBody}>
-              <View style={[styles.badge, { backgroundColor: `${cat.color}18` }]}>
-                <Text style={[styles.badgeText, { color: cat.color }]}>
-                  {spot.cat.toUpperCase()}
-                </Text>
+              <View style={styles.badgeRow}>
+                <View style={[styles.badge, { backgroundColor: `${cat.color}18` }]}>
+                  <Text style={[styles.badgeText, { color: cat.color }]}>
+                    {spot.cat.toUpperCase()}
+                  </Text>
+                </View>
+                <View
+                  style={[
+                    styles.badge,
+                    { backgroundColor: isOffCampus ? `${colors.brown}18` : `${colors.blue}18` }
+                  ]}
+                >
+                  <Text
+                    style={[styles.badgeText, { color: isOffCampus ? colors.brown : colors.blue }]}
+                  >
+                    {isOffCampus ? "OFF-CAMPUS" : "UNIVERSITY"}
+                  </Text>
+                </View>
               </View>
               <Text style={styles.name}>{spot.name}</Text>
               <Text style={styles.address}>{spot.address}</Text>
@@ -103,30 +134,14 @@ export default function SpotDetailScreen() {
               </Text>
             </View>
 
-            <View style={styles.bars}>
-              {CROWD_ORDER.map((level, index) => {
-                const votes = spot.votes[index];
-                const isCurrent = status.n === index;
-                return (
-                  <View key={level} style={styles.barCol}>
-                    <View style={styles.barTrack}>
-                      <View
-                        style={[
-                          styles.barFill,
-                          {
-                            height: Math.max(6, Math.round((votes / peakVotes) * BAR_HEIGHT)),
-                            backgroundColor: isCurrent ? status.color : colors.barIdle
-                          }
-                        ]}
-                      />
-                    </View>
-                    <Text style={styles.barLabel}>
-                      {level === "some" ? "Some" : level[0].toUpperCase() + level.slice(1)}
-                    </Text>
-                  </View>
-                );
-              })}
-            </View>
+            {live?.mixed ? (
+              <View style={styles.mixedNote}>
+                <Ionicons name="shuffle" size={11} color={colors.faint} />
+                <Text style={styles.mixedNoteText}>
+                  Recent reports disagree — this is a blended estimate.
+                </Text>
+              </View>
+            ) : null}
 
             <View style={styles.facts}>
               <View style={styles.fact}>
@@ -149,6 +164,8 @@ export default function SpotDetailScreen() {
               </Text>
             ))}
           </View>
+
+          <FeedbackSection spotId={spot.id} spotName={spot.name} />
         </ScrollView>
       </Animated.View>
     </View>
@@ -206,6 +223,11 @@ const styles = StyleSheet.create({
   headBody: {
     flex: 1,
     minWidth: 0
+  },
+  badgeRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 6
   },
   badge: {
     alignSelf: "flex-start",
@@ -319,30 +341,17 @@ const styles = StyleSheet.create({
     fontFamily: fonts.body,
     color: colors.faint
   },
-  bars: {
+  mixedNote: {
     flexDirection: "row",
+    alignItems: "center",
     gap: 6
   },
-  barCol: {
-    flex: 1
-  },
-  barTrack: {
-    height: BAR_HEIGHT,
-    backgroundColor: colors.border,
-    borderRadius: 6,
-    justifyContent: "flex-end",
-    overflow: "hidden"
-  },
-  barFill: {
-    width: "100%"
-  },
-  barLabel: {
+  mixedNoteText: {
+    flex: 1,
     fontFamily: fonts.body,
-    fontSize: 9.5,
-    lineHeight: 12,
-    color: colors.faint,
-    textAlign: "center",
-    marginTop: 5
+    fontSize: 11.5,
+    lineHeight: 15,
+    color: colors.faint
   },
   facts: {
     flexDirection: "row",

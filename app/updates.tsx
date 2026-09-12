@@ -3,13 +3,24 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Animated, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
-import { fetchUpdateLog, StudySpotsNotConfiguredError, type UpdateLogEntry } from "@/api/studySpots";
+import {
+  fetchUpdateLog,
+  StudySpotsNotConfiguredError,
+  type UpdateLogEntry,
+  type UpdateLogEntryType
+} from "@/api/studySpots";
 import { formatDateTime } from "@/lib/formatDateTime";
 import { useSheetEntrance } from "@/lib/useSheetEntrance";
 import { useAppState } from "@/state/appState";
 import { colors, fonts, overline } from "@/theme";
 
 type LoadState = "loading" | "ready" | "empty" | "unconfigured" | "error";
+
+function entryTagLabel(type: UpdateLogEntryType): string {
+  if (type === "suggestion") return "Suggestion";
+  if (type === "announcement") return "Update";
+  return "Feedback";
+}
 
 export default function UpdatesScreen() {
   const router = useRouter();
@@ -74,9 +85,7 @@ export default function UpdatesScreen() {
         <ScrollView contentContainerStyle={styles.content}>
           {state === "loading" ? <Text style={styles.status}>Loading updates…</Text> : null}
           {state === "empty" ? (
-            <Text style={styles.status}>
-              No updates yet — check back after you submit feedback or a suggestion.
-            </Text>
+            <Text style={styles.status}>No updates yet — check back soon.</Text>
           ) : null}
           {state === "unconfigured" ? (
             <Text style={styles.status}>Updates aren't available in this build yet.</Text>
@@ -88,9 +97,7 @@ export default function UpdatesScreen() {
           {state === "ready"
             ? entries.map((entry, i) => (
                 <View key={`${entry.ts}-${i}`} style={styles.entry}>
-                  <Text style={styles.entryTag}>
-                    {entry.type === "suggestion" ? "Suggestion" : "Feedback"}
-                  </Text>
+                  <Text style={styles.entryTag}>{entryTagLabel(entry.type)}</Text>
                   <Text style={styles.entrySummary}>{entry.summary}</Text>
                   <Text style={styles.entryResponse}>{entry.response}</Text>
                   <Text style={styles.entryTime}>{formatDateTime(entry.ts)}</Text>

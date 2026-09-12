@@ -5,15 +5,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { SpotCard } from "@/components/SpotCard";
 import { Toast } from "@/components/Toast";
-import { SPOTS } from "@/data/spots";
 import { useAppState } from "@/state/appState";
 import { colors, fonts, overline } from "@/theme";
 import type { Spot } from "@/types/spot";
 
 export default function SavedScreen() {
   const router = useRouter();
-  const { savedIds } = useAppState();
-  const saved = SPOTS.filter((spot) => savedIds.includes(spot.id));
+  const { savedIds, spots } = useAppState();
+  const saved = spots.filter((spot) => savedIds.includes(spot.id));
 
   function openSpot(spot: Spot) {
     router.push(`/spot/${spot.id}`);

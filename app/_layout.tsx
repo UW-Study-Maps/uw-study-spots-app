@@ -3,6 +3,7 @@ import { StatusBar } from "expo-status-bar";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { Onboarding } from "@/components/Onboarding";
+import { UpdateToast } from "@/components/UpdateToast";
 import { useAppFonts } from "@/lib/fonts";
 import { AppStateProvider, useAppState } from "@/state/appState";
 import { colors } from "@/theme";
@@ -45,6 +46,9 @@ function RootNavigator() {
         <Stack.Screen name="spot/[id]" options={SHEET_OPTIONS} />
         <Stack.Screen name="report/[id]" options={SHEET_OPTIONS} />
         <Stack.Screen name="updates" options={SHEET_OPTIONS} />
+        <Stack.Screen name="more" options={SHEET_OPTIONS} />
+        <Stack.Screen name="suggest" options={SHEET_OPTIONS} />
+        <Stack.Screen name="about" options={SHEET_OPTIONS} />
         <Stack.Screen name="routes/[id]" />
         <Stack.Screen name="nav/[id]" />
       </Stack>
@@ -58,6 +62,8 @@ function RootNavigator() {
           <Onboarding />
         </View>
       ) : null}
+
+      {ready && onboarded ? <UpdateToast /> : null}
     </View>
   );
 }

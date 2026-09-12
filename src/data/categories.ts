@@ -48,6 +48,7 @@ export const TAGS = [
   "Lively",
   "Group-Friendly",
   "Solo-Friendly",
+  "Food & Coffee",
   "Late Hours",
   "Hidden Gem",
   "Lake View"

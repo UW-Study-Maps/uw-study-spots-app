@@ -4,7 +4,7 @@ import { Animated, Pressable, ScrollView, StyleSheet, Text, View } from "react-n
 
 import { OptionButton } from "@/components/Chips";
 import { CROWD_ICON, CROWD_ORDER, NOISE_OPTS, OUTLET_OPTS, ST } from "@/data/categories";
-import { getSpot } from "@/data/spots";
+import { formatDuration } from "@/lib/formatDateTime";
 import { useSheetEntrance } from "@/lib/useSheetEntrance";
 import { useAppState } from "@/state/appState";
 import { colors, fonts, overline } from "@/theme";
@@ -13,15 +13,18 @@ import type { CrowdLevel, NoiseLevel, OutletLevel } from "@/types/spot";
 export default function ReportScreen() {
   const { id, context } = useLocalSearchParams<{ id: string; context?: string }>();
   const router = useRouter();
-  const { submitReport, showToast } = useAppState();
+  const { getSpot, submitReport, showToast, reportLockedUntil } = useAppState();
   const entrance = useSheetEntrance();
 
   const [crowd, setCrowd] = useState<CrowdLevel | null>(null);
   const [noise, setNoise] = useState<NoiseLevel | null>(null);
   const [outlets, setOutlets] = useState<OutletLevel | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const spot = getSpot(id);
   const isArrival = context === "arrival";
+  const lockedUntil = spot ? reportLockedUntil(spot.id) : 0;
+  const locked = lockedUntil > Date.now();
 
   function dismiss() {
     // Arriving lands here from navigation, so there is nothing to go back to.
@@ -29,13 +32,19 @@ export default function ReportScreen() {
     else router.replace("/");
   }
 
-  function submit() {
-    if (!crowd || !spot) return;
-    submitReport(spot.id, { crowd, noise, outlets });
-    showToast(
-      `${spot.name} marked ${ST[crowd].label.toLowerCase()}. Thanks — everyone heading over sees it now.`
-    );
-    dismiss();
+  async function submit() {
+    if (!crowd || !spot || submitting || locked) return;
+    setSubmitting(true);
+    const result = await submitReport(spot.id, { crowd, noise, outlets });
+    if (result.ok) {
+      showToast(
+        `${spot.name} marked ${ST[crowd].label.toLowerCase()}. Thanks — everyone heading over sees it now.`
+      );
+      dismiss();
+      return;
+    }
+    setSubmitting(false);
+    showToast(result.error ?? "Something went wrong — try again.");
   }
 
   if (!spot) {
@@ -71,7 +80,16 @@ export default function ReportScreen() {
           <Text style={styles.sub}>Three taps. Everyone heading over sees it instantly.</Text>
 
           <Text style={styles.sectionLabel}>Crowding</Text>
-          <View style={styles.crowdGrid}>
+          {locked ? (
+            <Text style={styles.lockNote}>
+              You already reported this spot — you can report again in{" "}
+              {formatDuration(lockedUntil - Date.now())}.
+            </Text>
+          ) : null}
+          <View
+            style={[styles.crowdGrid, locked && styles.crowdGridLocked]}
+            pointerEvents={locked ? "none" : "auto"}
+          >
             {CROWD_ORDER.map((level) => (
               <View key={level} style={styles.crowdCell}>
                 <OptionButton
@@ -110,16 +128,22 @@ export default function ReportScreen() {
           </View>
 
           <Pressable
-            style={[styles.submit, !crowd && styles.submitDisabled]}
-            disabled={!crowd}
+            style={[styles.submit, (!crowd || submitting || locked) && styles.submitDisabled]}
+            disabled={!crowd || submitting || locked}
             onPress={submit}
           >
             <Text style={styles.submitText}>
-              {crowd ? "Post report" : "Pick a crowding level"}
+              {locked
+                ? "Already reported"
+                : submitting
+                  ? "Posting…"
+                  : crowd
+                    ? "Post report"
+                    : "Pick a crowding level"}
             </Text>
           </Pressable>
 
-          <Pressable style={styles.dismiss} onPress={dismiss}>
+          <Pressable style={styles.dismiss} onPress={dismiss} disabled={submitting}>
             <Text style={styles.dismissText}>Not now</Text>
           </Pressable>
         </ScrollView>
@@ -209,10 +233,20 @@ const styles = StyleSheet.create({
     marginBottom: 9,
     marginTop: 16
   },
+  lockNote: {
+    fontFamily: fonts.body,
+    fontSize: 12,
+    lineHeight: 17,
+    color: colors.faint,
+    marginBottom: 9
+  },
   crowdGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 7
+  },
+  crowdGridLocked: {
+    opacity: 0.4
   },
   // Two per row, matching the design's default "Chips" report style.
   crowdCell: {

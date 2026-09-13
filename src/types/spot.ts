@@ -28,6 +28,14 @@ export interface Spot {
   outlets: OutletLevel;
   tags: string[];
   desc: string;
+  /**
+   * Weekday hours from Google Places, e.g. "Monday: 7:30 AM – 11:00 PM" x7,
+   * in whatever day order Google returns; null when nothing is listed there
+   * (including permanently-closed listings — never shown as if operating).
+   */
+  hours: string[] | null;
+  /** True when `hours` are the containing building's, not this exact spot's — Google has no separate listing for every room/floor/outdoor area. */
+  hoursApprox?: boolean;
 }
 
 export interface CategoryMeta {

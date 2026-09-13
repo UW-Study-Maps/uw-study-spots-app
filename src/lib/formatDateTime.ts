@@ -21,3 +21,8 @@ export function formatDuration(ms: number): string {
   const minutes = Math.ceil(ms / 60000);
   return minutes <= 1 ? "1 min" : `${minutes} min`;
 }
+
+/** 0 = Monday … 6 = Sunday — lines up with Google Places' weekdayDescriptions order. */
+export function mondayFirstDayIndex(date: Date = new Date()): number {
+  return (date.getDay() + 6) % 7;
+}

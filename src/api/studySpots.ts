@@ -185,13 +185,18 @@ interface SpotOverrideRecord {
   address?: string;
   tags?: string[];
   description?: string;
+  /** Written by the hours-refresh Worker (spot-override:<id> in KV), not the dashboard editor. */
+  hours?: string[] | null;
+  hoursApprox?: boolean;
 }
 
 /**
- * Live spot-data corrections made via the website's `/dashboard-edit` — name,
- * address, category, tags, description. Coordinates are never overridden (the
- * dashboard editor never writes them), so `lat`/`lng` are left alone.
- * Keyed by spot id; a spot with no override simply won't appear in the map.
+ * Live spot-data corrections merged server-side into `/api/spots` — name,
+ * address, category, tags, and description from the website's
+ * `/dashboard-edit`, plus hours from the separate hours-refresh Worker (see
+ * uw-study-spots-map/workers/hours-refresh). Coordinates are never
+ * overridden, so `lat`/`lng` are left alone. Keyed by spot id; a spot with no
+ * override simply won't appear in the map.
  */
 export async function fetchSpotOverrides(): Promise<Record<string, Partial<Spot>>> {
   const res = await fetchWithTimeout("/api/spots");
@@ -206,6 +211,10 @@ export async function fetchSpotOverrides(): Promise<Record<string, Partial<Spot>
     if (record.category) override.cat = record.category as Spot["cat"];
     if (record.tags) override.tags = record.tags;
     if (record.description) override.desc = record.description;
+    // hours is meaningfully `null` (e.g. a business Google now shows as
+    // permanently closed), so check presence rather than truthiness.
+    if (record.hours !== undefined) override.hours = record.hours;
+    if (record.hoursApprox !== undefined) override.hoursApprox = record.hoursApprox;
     if (Object.keys(override).length > 0) overrides[record.id] = override;
   }
   return overrides;

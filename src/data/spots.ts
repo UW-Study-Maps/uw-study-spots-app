@@ -30,7 +30,16 @@ export const SPOTS: Spot[] = [
     noise: "Moderate hum",
     outlets: "Outlets at most seats",
     tags: ["University", "Social", "Group-Friendly", "Late Hours", "Food & Coffee"],
-    desc: "The busiest library on campus and a favorite for undergrads — open late into the night with a mix of group rooms, comfy chairs, and quiet floors depending on what mode you're in."
+    desc: "The busiest library on campus and a favorite for undergrads — open late into the night with a mix of group rooms, comfy chairs, and quiet floors depending on what mode you're in.",
+    hours: [
+      "Monday: 7:30 AM – 11:00 PM",
+      "Tuesday: 7:30 AM – 11:00 PM",
+      "Wednesday: 7:30 AM – 11:00 PM",
+      "Thursday: 7:30 AM – 11:00 PM",
+      "Friday: 7:30 AM – 9:00 PM",
+      "Saturday: 11:00 AM – 9:00 PM",
+      "Sunday: 11:00 AM – 11:00 PM"
+    ]
   },
   {
     id: "memorial-library",
@@ -42,7 +51,16 @@ export const SPOTS: Spot[] = [
     noise: "Silent",
     outlets: "Some outlets",
     tags: ["University", "Quiet", "Solo-Friendly"],
-    desc: "UW's main research library — tall stacks, individual carrels, and a serious, hushed atmosphere that's ideal when you actually need to focus."
+    desc: "UW's main research library — tall stacks, individual carrels, and a serious, hushed atmosphere that's ideal when you actually need to focus.",
+    hours: [
+      "Monday: 8:30 AM – 11:00 PM",
+      "Tuesday: 8:30 AM – 11:00 PM",
+      "Wednesday: 8:30 AM – 11:00 PM",
+      "Thursday: 8:30 AM – 11:00 PM",
+      "Friday: 8:30 AM – 9:00 PM",
+      "Saturday: 12:00 – 9:00 PM",
+      "Sunday: 12:00 – 11:00 PM"
+    ]
   },
   {
     id: "law-library",
@@ -58,7 +76,16 @@ export const SPOTS: Spot[] = [
     noise: "Silent",
     outlets: "Some outlets",
     tags: ["University", "Quiet", "Hidden Gem", "Solo-Friendly"],
-    desc: "A grand, wood-paneled reading room that feels more like a private study hall than a law library — one of campus's most underrated quiet spots."
+    desc: "A grand, wood-paneled reading room that feels more like a private study hall than a law library — one of campus's most underrated quiet spots.",
+    hours: [
+      "Monday: 9:00 AM – 6:00 PM",
+      "Tuesday: 9:00 AM – 6:00 PM",
+      "Wednesday: 9:00 AM – 6:00 PM",
+      "Thursday: 9:00 AM – 6:00 PM",
+      "Friday: 9:00 AM – 6:00 PM",
+      "Saturday: 10:00 AM – 5:00 PM",
+      "Sunday: Closed"
+    ]
   },
   {
     id: "business-library",
@@ -70,7 +97,16 @@ export const SPOTS: Spot[] = [
     noise: "Moderate hum",
     outlets: "Outlets at most seats",
     tags: ["University", "Chill", "Group-Friendly"],
-    desc: "Sleek and modern — regularly cited by students as the nicest library on campus, with plenty of natural light and comfortable seating throughout Grainger Hall."
+    desc: "Sleek and modern — regularly cited by students as the nicest library on campus, with plenty of natural light and comfortable seating throughout Grainger Hall.",
+    hours: [
+      "Monday: 9:00 AM – 4:00 PM",
+      "Tuesday: 9:00 AM – 4:00 PM",
+      "Wednesday: 9:00 AM – 4:00 PM",
+      "Thursday: 9:00 AM – 4:00 PM",
+      "Friday: 9:00 AM – 4:00 PM",
+      "Saturday: Closed",
+      "Sunday: Closed"
+    ]
   },
   {
     id: "hamel-browsing-library",
@@ -82,7 +118,17 @@ export const SPOTS: Spot[] = [
     noise: "Silent",
     outlets: "Few outlets",
     tags: ["University", "Quiet", "Solo-Friendly", "Hidden Gem"],
-    desc: "A quiet, plush reading room on the Union's second floor — genuinely silent, with generous seating that rarely fills up."
+    desc: "A quiet, plush reading room on the Union's second floor — genuinely silent, with generous seating that rarely fills up.",
+    hours: [
+      "Monday: 7:00 AM – 11:00 PM",
+      "Tuesday: 7:00 AM – 11:00 PM",
+      "Wednesday: 7:00 AM – 11:00 PM",
+      "Thursday: 7:00 AM – 11:00 PM",
+      "Friday: 7:00 AM – 11:00 PM",
+      "Saturday: 8:00 AM – 11:00 PM",
+      "Sunday: 8:00 AM – 11:00 PM"
+    ],
+    hoursApprox: true
   },
   {
     id: "memorial-union-terrace",
@@ -94,7 +140,16 @@ export const SPOTS: Spot[] = [
     noise: "Lively",
     outlets: "Few outlets",
     tags: ["University", "Social", "Lake View", "Food & Coffee"],
-    desc: "Campus's most iconic spot, period — sunburst chairs, brats, live music, and a straight-on view of Lake Mendota."
+    desc: "Campus's most iconic spot, period — sunburst chairs, brats, live music, and a straight-on view of Lake Mendota.",
+    hours: [
+      "Monday: 7:00 AM – 11:00 PM",
+      "Tuesday: 7:00 AM – 11:00 PM",
+      "Wednesday: 7:00 AM – 11:00 PM",
+      "Thursday: 7:00 AM – 11:00 PM",
+      "Friday: 7:00 AM – 11:00 PM",
+      "Saturday: 8:00 AM – 11:00 PM",
+      "Sunday: 8:00 AM – 11:00 PM"
+    ]
   },
   {
     id: "prairie-fire-lounge",
@@ -106,7 +161,16 @@ export const SPOTS: Spot[] = [
     noise: "Quiet",
     outlets: "Outlets at most seats",
     tags: ["University", "Quiet", "Chill", "Food & Coffee"],
-    desc: "A quiet study lounge with soft music and nature-inspired décor — Union South's answer to a calm study room, with coffee and tapas close by."
+    desc: "A quiet study lounge with soft music and nature-inspired décor — Union South's answer to a calm study room, with coffee and tapas close by.",
+    hours: [
+      "Monday: 7:00 AM – 5:00 PM",
+      "Tuesday: Closed",
+      "Wednesday: 7:00 AM – 5:00 PM",
+      "Thursday: 7:00 AM – 5:00 PM",
+      "Friday: 7:00 AM – 5:00 PM",
+      "Saturday: 7:00 AM – 5:00 PM",
+      "Sunday: 7:00 AM – 5:00 PM"
+    ]
   },
   {
     id: "wid",
@@ -118,7 +182,16 @@ export const SPOTS: Spot[] = [
     noise: "Moderate hum",
     outlets: "Outlets at most seats",
     tags: ["University", "Chill", "Group-Friendly", "Hidden Gem"],
-    desc: "An airy, glass-walled atrium built for interdisciplinary collaboration — modern furniture, tall ceilings, and a research-hub energy."
+    desc: "An airy, glass-walled atrium built for interdisciplinary collaboration — modern furniture, tall ceilings, and a research-hub energy.",
+    hours: [
+      "Monday: 7:00 AM – 8:00 PM",
+      "Tuesday: 7:00 AM – 8:00 PM",
+      "Wednesday: 7:00 AM – 8:00 PM",
+      "Thursday: 7:00 AM – 8:00 PM",
+      "Friday: 7:00 AM – 8:00 PM",
+      "Saturday: 9:00 AM – 8:00 PM",
+      "Sunday: Closed"
+    ]
   },
   {
     id: "chemistry-upper-floors",
@@ -130,7 +203,17 @@ export const SPOTS: Spot[] = [
     noise: "Quiet",
     outlets: "Some outlets",
     tags: ["University", "Quiet", "Hidden Gem", "Solo-Friendly"],
-    desc: "High-floor window seating with some of the best campus views around — students rate the 8th floor as the slightly better of the two."
+    desc: "High-floor window seating with some of the best campus views around — students rate the 8th floor as the slightly better of the two.",
+    hours: [
+      "Monday: 7:00 AM – 5:00 PM",
+      "Tuesday: 7:00 AM – 5:00 PM",
+      "Wednesday: 7:00 AM – 5:00 PM",
+      "Thursday: 7:00 AM – 5:00 PM",
+      "Friday: 7:00 AM – 5:00 PM",
+      "Saturday: Closed",
+      "Sunday: Closed"
+    ],
+    hoursApprox: true
   },
   {
     id: "babcock-dairy-store",
@@ -142,7 +225,16 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Chill", "Hidden Gem", "Food & Coffee"],
-    desc: "A low-key café inside UW's own dairy plant near the Bakke Rec Center — better known for ice cream, but a genuinely quiet, off-the-radar coffee break."
+    desc: "A low-key café inside UW's own dairy plant near the Bakke Rec Center — better known for ice cream, but a genuinely quiet, off-the-radar coffee break.",
+    hours: [
+      "Monday: 7:30 AM – 7:30 PM",
+      "Tuesday: 7:30 AM – 7:30 PM",
+      "Wednesday: 7:30 AM – 7:30 PM",
+      "Thursday: 7:30 AM – 7:30 PM",
+      "Friday: 7:30 AM – 7:30 PM",
+      "Saturday: 11:00 AM – 4:00 PM",
+      "Sunday: 11:00 AM – 4:00 PM"
+    ]
   },
   {
     id: "colectivo-state",
@@ -154,7 +246,16 @@ export const SPOTS: Spot[] = [
     noise: "Lively",
     outlets: "Few outlets",
     tags: ["Off-Campus", "Social", "Food & Coffee"],
-    desc: "A colorful, buzzing café a short walk from campus with strong espresso and enough space to camp out for a few hours."
+    desc: "A colorful, buzzing café a short walk from campus with strong espresso and enough space to camp out for a few hours.",
+    hours: [
+      "Monday: 7:00 AM – 5:00 PM",
+      "Tuesday: 7:00 AM – 5:00 PM",
+      "Wednesday: 7:00 AM – 5:00 PM",
+      "Thursday: 7:00 AM – 5:00 PM",
+      "Friday: 7:00 AM – 5:00 PM",
+      "Saturday: 7:00 AM – 5:00 PM",
+      "Sunday: 7:00 AM – 5:00 PM"
+    ]
   },
   {
     id: "gordon-dining",
@@ -166,7 +267,16 @@ export const SPOTS: Spot[] = [
     noise: "Lively",
     outlets: "Some outlets",
     tags: ["University", "Social", "Food & Coffee", "Late Hours"],
-    desc: "A dining hall with generous open seating on the upper floors — a favorite for students who like to study with food always in reach."
+    desc: "A dining hall with generous open seating on the upper floors — a favorite for students who like to study with food always in reach.",
+    hours: [
+      "Monday: 7:00 – 10:00 AM, 11:00 AM – 2:00 PM, 4:00 – 8:30 PM",
+      "Tuesday: 7:00 – 10:00 AM, 11:00 AM – 2:00 PM, 4:00 – 8:30 PM",
+      "Wednesday: 7:00 – 10:00 AM, 11:00 AM – 2:00 PM, 4:00 – 8:30 PM",
+      "Thursday: 7:00 – 10:00 AM, 11:00 AM – 2:00 PM, 4:00 – 8:30 PM",
+      "Friday: 7:00 – 10:00 AM, 11:00 AM – 2:00 PM, 4:00 – 8:30 PM",
+      "Saturday: 9:00 AM – 2:00 PM, 4:00 – 8:30 PM",
+      "Sunday: 9:00 AM – 2:00 PM, 4:00 – 8:30 PM"
+    ]
   },
   {
     id: "steenbock-library",
@@ -178,7 +288,16 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Quiet", "Hidden Gem", "Solo-Friendly"],
-    desc: "Tucked into the Ag campus near the dairy plant, Steenbock serves life-sciences students but welcomes anyone chasing a quiet table without the College Library crowds."
+    desc: "Tucked into the Ag campus near the dairy plant, Steenbock serves life-sciences students but welcomes anyone chasing a quiet table without the College Library crowds.",
+    hours: [
+      "Monday: 8:00 AM – 11:30 PM",
+      "Tuesday: 8:00 AM – 11:30 PM",
+      "Wednesday: 8:00 AM – 11:30 PM",
+      "Thursday: 8:00 AM – 11:30 PM",
+      "Friday: 8:00 AM – 8:00 PM",
+      "Saturday: 12:00 – 8:00 PM",
+      "Sunday: 12:00 – 11:30 PM"
+    ]
   },
   {
     id: "wendt-library",
@@ -190,7 +309,16 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Group-Friendly", "Late Hours"],
-    desc: "The engineering library and study commons — bright, modern, and stocked with computer labs and free printing, popular with STEM students grinding through problem sets."
+    desc: "The engineering library and study commons — bright, modern, and stocked with computer labs and free printing, popular with STEM students grinding through problem sets.",
+    hours: [
+      "Monday: 7:00 AM – 9:00 PM",
+      "Tuesday: 7:00 AM – 9:00 PM",
+      "Wednesday: 7:00 AM – 9:00 PM",
+      "Thursday: 7:00 AM – 9:00 PM",
+      "Friday: 7:00 AM – 6:00 PM",
+      "Saturday: Closed",
+      "Sunday: 12:00 – 9:00 PM"
+    ]
   },
   {
     id: "merit-library",
@@ -202,7 +330,16 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Chill", "Hidden Gem"],
-    desc: "The School of Education's library, known for bean bag chairs and a laid-back, low-traffic vibe that's great for an easy afternoon of reading."
+    desc: "The School of Education's library, known for bean bag chairs and a laid-back, low-traffic vibe that's great for an easy afternoon of reading.",
+    hours: [
+      "Monday: 8:00 AM – 5:00 PM",
+      "Tuesday: 8:00 AM – 5:00 PM",
+      "Wednesday: 8:00 AM – 5:00 PM",
+      "Thursday: 8:00 AM – 5:00 PM",
+      "Friday: 8:00 AM – 5:00 PM",
+      "Saturday: Closed",
+      "Sunday: Closed"
+    ]
   },
   {
     id: "kohler-art-library",
@@ -214,7 +351,16 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Quiet", "Hidden Gem"],
-    desc: "A calm, art-focused collection inside the Chazen Museum complex — great light, gallery-adjacent quiet, and rarely crowded."
+    desc: "A calm, art-focused collection inside the Chazen Museum complex — great light, gallery-adjacent quiet, and rarely crowded.",
+    hours: [
+      "Monday: 9:00 AM – 7:00 PM",
+      "Tuesday: 9:00 AM – 7:00 PM",
+      "Wednesday: 9:00 AM – 7:00 PM",
+      "Thursday: 9:00 AM – 7:00 PM",
+      "Friday: 9:00 AM – 5:00 PM",
+      "Saturday: 12:00 – 5:00 PM",
+      "Sunday: 12:00 – 5:00 PM"
+    ]
   },
   {
     id: "ebling-library",
@@ -226,7 +372,16 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Quiet", "Late Hours", "Group-Friendly"],
-    desc: "The library for med, pharmacy, and nursing students out on the health sciences campus — modern facilities and long hours during exam season."
+    desc: "The library for med, pharmacy, and nursing students out on the health sciences campus — modern facilities and long hours during exam season.",
+    hours: [
+      "Monday: 9:00 AM – 7:00 PM",
+      "Tuesday: 9:00 AM – 7:00 PM",
+      "Wednesday: 9:00 AM – 7:00 PM",
+      "Thursday: 9:00 AM – 7:00 PM",
+      "Friday: 9:00 AM – 5:00 PM",
+      "Saturday: Closed",
+      "Sunday: Closed"
+    ]
   },
   {
     id: "robinson-map-library",
@@ -238,7 +393,8 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Quiet", "Hidden Gem", "Solo-Friendly"],
-    desc: "A small, quaint collection inside historic Science Hall — a genuinely quiet, out-of-the-way corner of campus that few students know about."
+    desc: "A small, quaint collection inside historic Science Hall — a genuinely quiet, out-of-the-way corner of campus that few students know about.",
+    hours: null
   },
   {
     id: "limnology-library",
@@ -250,7 +406,17 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Quiet", "Hidden Gem", "Solo-Friendly", "Lake View"],
-    desc: "A tiny specialized library near the lake that's almost always empty — as close to guaranteed silence as campus gets."
+    desc: "A tiny specialized library near the lake that's almost always empty — as close to guaranteed silence as campus gets.",
+    hours: [
+      "Monday: 8:00 AM – 4:30 PM",
+      "Tuesday: 8:00 AM – 4:30 PM",
+      "Wednesday: 8:00 AM – 4:30 PM",
+      "Thursday: 8:00 AM – 4:30 PM",
+      "Friday: 8:00 AM – 4:30 PM",
+      "Saturday: Closed",
+      "Sunday: Closed"
+    ],
+    hoursApprox: true
   },
   {
     id: "social-work-library",
@@ -262,7 +428,16 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Chill"],
-    desc: "A welcoming, inclusive space with plenty of computers and printing — smaller and calmer than the big central libraries."
+    desc: "A welcoming, inclusive space with plenty of computers and printing — smaller and calmer than the big central libraries.",
+    hours: [
+      "Monday: 10:00 AM – 4:00 PM",
+      "Tuesday: 10:00 AM – 4:00 PM",
+      "Wednesday: 10:00 AM – 4:00 PM",
+      "Thursday: 10:00 AM – 4:00 PM",
+      "Friday: 10:00 AM – 4:00 PM",
+      "Saturday: Closed",
+      "Sunday: Closed"
+    ]
   },
   {
     id: "journalism-reading-room",
@@ -274,7 +449,16 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Quiet"],
-    desc: "A bright reading room with newer Mac workstations, tucked inside the Communication Arts building near Park Street."
+    desc: "A bright reading room with newer Mac workstations, tucked inside the Communication Arts building near Park Street.",
+    hours: [
+      "Monday: 9:30 AM – 6:30 PM",
+      "Tuesday: 9:30 AM – 6:30 PM",
+      "Wednesday: 9:30 AM – 6:30 PM",
+      "Thursday: 9:30 AM – 6:30 PM",
+      "Friday: 9:30 AM – 6:30 PM",
+      "Saturday: Closed",
+      "Sunday: Closed"
+    ]
   },
   {
     id: "lakefront-lounge",
@@ -286,7 +470,17 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Social", "Lake View", "Food & Coffee"],
-    desc: "A recently renovated lounge with big lake-facing windows, built for collaborative work and easy conversation over coffee."
+    desc: "A recently renovated lounge with big lake-facing windows, built for collaborative work and easy conversation over coffee.",
+    hours: [
+      "Monday: 3:00 – 10:00 PM",
+      "Tuesday: 3:00 – 10:00 PM",
+      "Wednesday: 3:00 – 10:00 PM",
+      "Thursday: 3:00 – 10:00 PM",
+      "Friday: 3:00 – 10:00 PM",
+      "Saturday: 3:00 – 10:00 PM",
+      "Sunday: 3:00 – 10:00 PM"
+    ],
+    hoursApprox: true
   },
   {
     id: "shannon-sunset-lounge",
@@ -298,7 +492,16 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Chill", "Lake View", "Hidden Gem"],
-    desc: "Cozy armchairs, a fireplace, and near-panoramic lake views make this one of the Union's most relaxing corners for slow reading."
+    desc: "Cozy armchairs, a fireplace, and near-panoramic lake views make this one of the Union's most relaxing corners for slow reading.",
+    hours: [
+      "Monday: 10:00 AM – 10:00 PM",
+      "Tuesday: 10:00 AM – 10:00 PM",
+      "Wednesday: 10:00 AM – 10:00 PM",
+      "Thursday: 10:00 AM – 10:00 PM",
+      "Friday: 10:00 AM – 10:00 PM",
+      "Saturday: 10:00 AM – 10:00 PM",
+      "Sunday: 10:00 AM – 10:00 PM"
+    ]
   },
   {
     id: "the-sett",
@@ -310,7 +513,16 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Social", "Lively", "Group-Friendly", "Food & Coffee"],
-    desc: "A lively food-hall-style space with a second-floor balcony that has outlets and charging ports — good for group work when you want food within reach."
+    desc: "A lively food-hall-style space with a second-floor balcony that has outlets and charging ports — good for group work when you want food within reach.",
+    hours: [
+      "Monday: 11:00 AM – 4:00 PM",
+      "Tuesday: 11:00 AM – 4:00 PM",
+      "Wednesday: 11:00 AM – 4:00 PM",
+      "Thursday: 11:00 AM – 4:00 PM",
+      "Friday: 11:00 AM – 4:00 PM",
+      "Saturday: Closed",
+      "Sunday: Closed"
+    ]
   },
   {
     id: "cs-6th-floor",
@@ -322,7 +534,17 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Quiet", "Hidden Gem"],
-    desc: "A low-key top-floor lounge with a surprisingly pleasant vibe — a solid, under-the-radar spot away from the busier lower floors."
+    desc: "A low-key top-floor lounge with a surprisingly pleasant vibe — a solid, under-the-radar spot away from the busier lower floors.",
+    hours: [
+      "Monday: 7:45 AM – 6:00 PM",
+      "Tuesday: 7:45 AM – 6:00 PM",
+      "Wednesday: 7:45 AM – 6:00 PM",
+      "Thursday: 7:45 AM – 6:00 PM",
+      "Friday: 7:45 AM – 6:00 PM",
+      "Saturday: Closed",
+      "Sunday: Closed"
+    ],
+    hoursApprox: true
   },
   {
     id: "cs-patio",
@@ -334,7 +556,17 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Chill", "Hidden Gem"],
-    desc: "A tiered outdoor patio with multiple seating levels — a solid pick for a laptop session on a warm afternoon between CS classes."
+    desc: "A tiered outdoor patio with multiple seating levels — a solid pick for a laptop session on a warm afternoon between CS classes.",
+    hours: [
+      "Monday: 7:45 AM – 6:00 PM",
+      "Tuesday: 7:45 AM – 6:00 PM",
+      "Wednesday: 7:45 AM – 6:00 PM",
+      "Thursday: 7:45 AM – 6:00 PM",
+      "Friday: 7:45 AM – 6:00 PM",
+      "Saturday: Closed",
+      "Sunday: Closed"
+    ],
+    hoursApprox: true
   },
   {
     id: "education-5th-floor",
@@ -346,7 +578,17 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Quiet", "Chill", "Hidden Gem"],
-    desc: "Standing desks and modern study pods give this floor a startup-office feel — modern, uncrowded, and easy to find a spot."
+    desc: "Standing desks and modern study pods give this floor a startup-office feel — modern, uncrowded, and easy to find a spot.",
+    hours: [
+      "Monday: 7:45 AM – 4:30 PM",
+      "Tuesday: 7:45 AM – 4:30 PM",
+      "Wednesday: 7:45 AM – 4:30 PM",
+      "Thursday: 7:45 AM – 4:30 PM",
+      "Friday: 7:45 AM – 4:30 PM",
+      "Saturday: Closed",
+      "Sunday: Closed"
+    ],
+    hoursApprox: true
   },
   {
     id: "biochem-301",
@@ -358,7 +600,17 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Group-Friendly", "Hidden Gem"],
-    desc: "Configurable breakout rooms make this a solid pick for small group study sessions on the Ag-campus side of things."
+    desc: "Configurable breakout rooms make this a solid pick for small group study sessions on the Ag-campus side of things.",
+    hours: [
+      "Monday: 7:45 AM – 12:00 PM, 12:45 – 4:30 PM",
+      "Tuesday: 7:45 AM – 12:00 PM, 12:45 – 4:30 PM",
+      "Wednesday: 7:45 AM – 12:00 PM, 12:45 – 4:30 PM",
+      "Thursday: 7:45 AM – 12:00 PM, 12:45 – 4:30 PM",
+      "Friday: 7:45 AM – 12:00 PM, 12:45 – 4:30 PM",
+      "Saturday: Closed",
+      "Sunday: Closed"
+    ],
+    hoursApprox: true
   },
   {
     id: "biochem-kitchen",
@@ -370,7 +622,17 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Social", "Lively"],
-    desc: "A social, kitchen-adjacent lounge with good views — livelier than most academic-building spots, good for a study break with friends."
+    desc: "A social, kitchen-adjacent lounge with good views — livelier than most academic-building spots, good for a study break with friends.",
+    hours: [
+      "Monday: 7:45 AM – 12:00 PM, 12:45 – 4:30 PM",
+      "Tuesday: 7:45 AM – 12:00 PM, 12:45 – 4:30 PM",
+      "Wednesday: 7:45 AM – 12:00 PM, 12:45 – 4:30 PM",
+      "Thursday: 7:45 AM – 12:00 PM, 12:45 – 4:30 PM",
+      "Friday: 7:45 AM – 12:00 PM, 12:45 – 4:30 PM",
+      "Saturday: Closed",
+      "Sunday: Closed"
+    ],
+    hoursApprox: true
   },
   {
     id: "soils-258",
@@ -382,7 +644,17 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Chill", "Hidden Gem"],
-    desc: "A genuinely cute room lined with plants and bookshelves — one of the more charming, least-known corners of the Ag campus."
+    desc: "A genuinely cute room lined with plants and bookshelves — one of the more charming, least-known corners of the Ag campus.",
+    hours: [
+      "Monday: 7:45 AM – 4:30 PM",
+      "Tuesday: 7:45 AM – 4:30 PM",
+      "Wednesday: 7:45 AM – 4:30 PM",
+      "Thursday: 7:45 AM – 4:30 PM",
+      "Friday: 7:45 AM – 4:30 PM",
+      "Saturday: Closed",
+      "Sunday: Closed"
+    ],
+    hoursApprox: true
   },
   {
     id: "badger-market",
@@ -394,7 +666,17 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Social", "Food & Coffee"],
-    desc: "Open café-style seating with food service on hand, making it an easy stop for anyone studying on the west side of the Ag campus."
+    desc: "Open café-style seating with food service on hand, making it an easy stop for anyone studying on the west side of the Ag campus.",
+    hours: [
+      "Monday: 7:00 AM – 7:00 PM",
+      "Tuesday: 7:00 AM – 7:00 PM",
+      "Wednesday: 7:00 AM – 7:00 PM",
+      "Thursday: 7:00 AM – 7:00 PM",
+      "Friday: 7:00 AM – 7:00 PM",
+      "Saturday: Closed",
+      "Sunday: Closed"
+    ],
+    hoursApprox: true
   },
   {
     id: "engineering-computer-labs",
@@ -406,7 +688,17 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Group-Friendly"],
-    desc: "Well-equipped computer labs with free printing — a dependable, no-frills option for engineering students needing lab software."
+    desc: "Well-equipped computer labs with free printing — a dependable, no-frills option for engineering students needing lab software.",
+    hours: [
+      "Monday: 7:00 AM – 9:00 PM",
+      "Tuesday: 7:00 AM – 9:00 PM",
+      "Wednesday: 7:00 AM – 9:00 PM",
+      "Thursday: 7:00 AM – 9:00 PM",
+      "Friday: 7:00 AM – 9:00 PM",
+      "Saturday: Closed",
+      "Sunday: Closed"
+    ],
+    hoursApprox: true
   },
   {
     id: "university-club",
@@ -418,7 +710,8 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Chill", "Social", "Hidden Gem"],
-    desc: "A two-floor space with games alongside study seating — an easygoing option right at the base of Bascom Hill."
+    desc: "A two-floor space with games alongside study seating — an easygoing option right at the base of Bascom Hill.",
+    hours: null
   },
   {
     id: "geo-sciences-picnic",
@@ -430,7 +723,17 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Quiet", "Hidden Gem"],
-    desc: "Simple picnic tables outside Weeks Hall — unglamorous but pleasant on a nice day, and rarely busy."
+    desc: "Simple picnic tables outside Weeks Hall — unglamorous but pleasant on a nice day, and rarely busy.",
+    hours: [
+      "Monday: 8:30 AM – 4:30 PM",
+      "Tuesday: 8:30 AM – 4:30 PM",
+      "Wednesday: 8:30 AM – 4:30 PM",
+      "Thursday: 8:30 AM – 4:30 PM",
+      "Friday: 8:30 AM – 4:30 PM",
+      "Saturday: 9:00 AM – 1:00 PM",
+      "Sunday: Closed"
+    ],
+    hoursApprox: true
   },
   {
     id: "energy-institute-patio",
@@ -442,7 +745,8 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Social", "Hidden Gem"],
-    desc: "A sunny patio that turns into one of the best warm-weather hangouts on the engineering side of campus."
+    desc: "A sunny patio that turns into one of the best warm-weather hangouts on the engineering side of campus.",
+    hours: null
   },
   {
     id: "greenhouse-benches",
@@ -454,7 +758,17 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Quiet", "Chill", "Hidden Gem"],
-    desc: "Benches tucked next to the botany greenhouses — fresh air, plants, and about as peaceful as campus gets."
+    desc: "Benches tucked next to the botany greenhouses — fresh air, plants, and about as peaceful as campus gets.",
+    hours: [
+      "Monday: 8:00 AM – 4:30 PM",
+      "Tuesday: 8:00 AM – 4:30 PM",
+      "Wednesday: 8:00 AM – 4:30 PM",
+      "Thursday: 8:00 AM – 4:30 PM",
+      "Friday: 8:00 AM – 4:30 PM",
+      "Saturday: Closed",
+      "Sunday: Closed"
+    ],
+    hoursApprox: true
   },
   {
     id: "library-mall",
@@ -466,7 +780,8 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Social", "Lively", "Food & Coffee"],
-    desc: "The plaza where State Street meets campus — food carts, people-watching, and enough energy to make studying feel social."
+    desc: "The plaza where State Street meets campus — food carts, people-watching, and enough energy to make studying feel social.",
+    hours: null
   },
   {
     id: "lakeshore-path",
@@ -478,7 +793,17 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["University", "Quiet", "Chill", "Lake View", "Hidden Gem"],
-    desc: "A wooded, waterside trail a short walk from the Union — the closest thing to nature-immersion studying you'll find on campus."
+    desc: "A wooded, waterside trail a short walk from the Union — the closest thing to nature-immersion studying you'll find on campus.",
+    hours: [
+      "Monday: 4:00 AM – 10:00 PM",
+      "Tuesday: 4:00 AM – 10:00 PM",
+      "Wednesday: 4:00 AM – 10:00 PM",
+      "Thursday: 4:00 AM – 10:00 PM",
+      "Friday: 4:00 AM – 10:00 PM",
+      "Saturday: 4:00 AM – 10:00 PM",
+      "Sunday: 4:00 AM – 10:00 PM"
+    ],
+    hoursApprox: true
   },
   {
     id: "michelangelos",
@@ -490,7 +815,16 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["Off-Campus", "Social", "Late Hours", "Food & Coffee"],
-    desc: "A State Street institution near the Capitol with an eclectic, artsy interior and a loyal late-night crowd."
+    desc: "A State Street institution near the Capitol with an eclectic, artsy interior and a loyal late-night crowd.",
+    hours: [
+      "Monday: 8:00 AM – 8:00 PM",
+      "Tuesday: 8:00 AM – 8:00 PM",
+      "Wednesday: 8:00 AM – 8:00 PM",
+      "Thursday: 8:00 AM – 8:00 PM",
+      "Friday: 8:00 AM – 8:00 PM",
+      "Saturday: 7:00 AM – 8:00 PM",
+      "Sunday: 8:00 AM – 8:00 PM"
+    ]
   },
   {
     id: "fair-trade",
@@ -502,7 +836,16 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["Off-Campus", "Chill", "Food & Coffee"],
-    desc: "A cozy, community-minded café on State Street known for good sandwiches and bakery items alongside its coffee."
+    desc: "A cozy, community-minded café on State Street known for good sandwiches and bakery items alongside its coffee.",
+    hours: [
+      "Monday: 7:30 AM – 6:00 PM",
+      "Tuesday: 7:30 AM – 6:00 PM",
+      "Wednesday: 7:30 AM – 6:00 PM",
+      "Thursday: 7:30 AM – 6:00 PM",
+      "Friday: 7:30 AM – 6:00 PM",
+      "Saturday: 8:00 AM – 6:00 PM",
+      "Sunday: 8:00 AM – 6:00 PM"
+    ]
   },
   {
     id: "indie-coffee",
@@ -514,7 +857,16 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["Off-Campus", "Chill", "Food & Coffee"],
-    desc: "A neighborhood coffee shop near Camp Randall with a relaxed, local feel — a nice break from the campus-core crowds."
+    desc: "A neighborhood coffee shop near Camp Randall with a relaxed, local feel — a nice break from the campus-core crowds.",
+    hours: [
+      "Monday: 7:00 AM – 6:00 PM",
+      "Tuesday: 7:00 AM – 6:00 PM",
+      "Wednesday: 7:00 AM – 6:00 PM",
+      "Thursday: 7:00 AM – 6:00 PM",
+      "Friday: 7:00 AM – 6:00 PM",
+      "Saturday: 7:00 AM – 6:00 PM",
+      "Sunday: 7:00 AM – 6:00 PM"
+    ]
   },
   {
     id: "evp-coffee",
@@ -526,7 +878,16 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["Off-Campus", "Chill", "Food & Coffee"],
-    desc: "A spacious west-campus coffee shop with plenty of tables, popular with grad students and staff from nearby research buildings."
+    desc: "A spacious west-campus coffee shop with plenty of tables, popular with grad students and staff from nearby research buildings.",
+    hours: [
+      "Monday: 7:00 AM – 1:00 PM",
+      "Tuesday: 7:00 AM – 1:00 PM",
+      "Wednesday: 7:00 AM – 1:00 PM",
+      "Thursday: 7:00 AM – 1:00 PM",
+      "Friday: 7:00 AM – 1:00 PM",
+      "Saturday: Closed",
+      "Sunday: Closed"
+    ]
   },
   {
     id: "barriques-monroe",
@@ -538,7 +899,16 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["Off-Campus", "Social", "Food & Coffee"],
-    desc: "A wine-shop-meets-café in the Monroe Street neighborhood, with a full breakfast and lunch menu and a warm, neighborhood feel."
+    desc: "A wine-shop-meets-café in the Monroe Street neighborhood, with a full breakfast and lunch menu and a warm, neighborhood feel.",
+    hours: [
+      "Monday: 6:30 AM – 7:00 PM",
+      "Tuesday: 6:30 AM – 7:00 PM",
+      "Wednesday: 6:30 AM – 7:00 PM",
+      "Thursday: 6:30 AM – 7:00 PM",
+      "Friday: 6:30 AM – 7:00 PM",
+      "Saturday: 6:30 AM – 7:00 PM",
+      "Sunday: 7:00 AM – 6:00 PM"
+    ]
   },
   {
     id: "upper-house",
@@ -550,7 +920,16 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["Off-Campus", "Quiet", "Chill", "Group-Friendly", "Hidden Gem", "Food & Coffee"],
-    desc: "A strikingly designed lounge right on East Campus Mall — circular tables, booths, and reservable private study rooms, run by a Christian study center but open to all students. Open weekdays 9am–5pm only, so plan around it."
+    desc: "A strikingly designed lounge right on East Campus Mall — circular tables, booths, and reservable private study rooms, run by a Christian study center but open to all students. Open weekdays 9am–5pm only, so plan around it.",
+    hours: [
+      "Monday: 9:00 AM – 5:00 PM",
+      "Tuesday: 9:00 AM – 5:00 PM",
+      "Wednesday: 9:00 AM – 5:00 PM",
+      "Thursday: 9:00 AM – 5:00 PM",
+      "Friday: 9:00 AM – 5:00 PM",
+      "Saturday: Closed",
+      "Sunday: Closed"
+    ]
   },
   {
     id: "historical-society-library",
@@ -562,7 +941,16 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["Off-Campus", "Quiet", "Hidden Gem", "Solo-Friendly"],
-    desc: "A serious, no-talking research library right next door to Memorial Library — marble halls and an almost reverent hush make it one of the strictest quiet spaces near campus."
+    desc: "A serious, no-talking research library right next door to Memorial Library — marble halls and an almost reverent hush make it one of the strictest quiet spaces near campus.",
+    hours: [
+      "Monday: 8:00 AM – 5:00 PM",
+      "Tuesday: 8:00 AM – 5:00 PM",
+      "Wednesday: 8:00 AM – 5:00 PM",
+      "Thursday: 8:00 AM – 7:00 PM",
+      "Friday: 8:00 AM – 5:00 PM",
+      "Saturday: 9:00 AM – 4:00 PM",
+      "Sunday: Closed"
+    ]
   },
   {
     id: "st-francis-house",
@@ -574,7 +962,16 @@ export const SPOTS: Spot[] = [
     noise: "Unknown",
     outlets: "Unknown",
     tags: ["Off-Campus", "Quiet", "Chill", "Hidden Gem"],
-    desc: "An Episcopal student center on University Avenue with a dedicated study room — big tables, leather chairs, and soft background music, open to students of any faith or none."
+    desc: "An Episcopal student center on University Avenue with a dedicated study room — big tables, leather chairs, and soft background music, open to students of any faith or none.",
+    hours: [
+      "Monday: 9:00 AM – 5:00 PM",
+      "Tuesday: 9:00 AM – 5:00 PM",
+      "Wednesday: 9:00 AM – 5:00 PM",
+      "Thursday: 9:00 AM – 5:00 PM",
+      "Friday: 9:00 AM – 1:00 PM",
+      "Saturday: Closed",
+      "Sunday: Closed"
+    ]
   }
 ];
 

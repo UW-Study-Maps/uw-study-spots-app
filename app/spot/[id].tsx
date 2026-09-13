@@ -5,7 +5,7 @@ import { Animated, Pressable, ScrollView, StyleSheet, Text, View } from "react-n
 
 import { FeedbackSection } from "@/components/FeedbackSection";
 import { CAT } from "@/data/categories";
-import { formatRelativeTime } from "@/lib/formatDateTime";
+import { formatRelativeTime, mondayFirstDayIndex } from "@/lib/formatDateTime";
 import { walkLabel } from "@/lib/routes";
 import { useSheetEntrance } from "@/lib/useSheetEntrance";
 import { useAppState } from "@/state/appState";
@@ -48,6 +48,7 @@ export default function SpotDetailScreen() {
   const report = reports[spot.id];
   const live = liveBusyness[spot.id];
   const saved = isSaved(spot.id);
+  const hoursList = spot.hours;
   // Not a structured field — every spot carries one of these two as a tag,
   // same as the website's raw data, which the app already mirrors that way.
   const isOffCampus = spot.tags.includes("Off-Campus");
@@ -154,6 +155,32 @@ export default function SpotDetailScreen() {
               </View>
             </View>
           </View>
+
+          {hoursList ? (
+            <View style={styles.panel}>
+              <View style={styles.hoursHeadRow}>
+                <Text style={styles.panelTitle}>Hours</Text>
+                {spot.hoursApprox ? (
+                  <Text style={styles.hoursApproxNote}>Building hours — may vary</Text>
+                ) : null}
+              </View>
+              {hoursList.map((line, index) => {
+                const sep = line.indexOf(": ");
+                const day = sep === -1 ? line : line.slice(0, sep);
+                const time = sep === -1 ? "" : line.slice(sep + 2);
+                const isToday = index === mondayFirstDayIndex();
+                return (
+                  <View
+                    key={day}
+                    style={[styles.hoursRow, index === hoursList.length - 1 && styles.hoursRowLast]}
+                  >
+                    <Text style={[styles.hoursDay, isToday && styles.hoursTextToday]}>{day}</Text>
+                    <Text style={[styles.hoursTime, isToday && styles.hoursTextToday]}>{time}</Text>
+                  </View>
+                );
+              })}
+            </View>
+          ) : null}
 
           <Text style={styles.desc}>{spot.desc}</Text>
 
@@ -352,6 +379,47 @@ const styles = StyleSheet.create({
     fontSize: 11.5,
     lineHeight: 15,
     color: colors.faint
+  },
+  hoursHeadRow: {
+    flexDirection: "row",
+    alignItems: "baseline",
+    justifyContent: "space-between",
+    marginBottom: 4
+  },
+  hoursApproxNote: {
+    fontFamily: fonts.medium,
+    fontSize: 10.5,
+    lineHeight: 14,
+    color: colors.faint
+  },
+  hoursRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 12,
+    paddingVertical: 7,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+    borderStyle: "dashed"
+  },
+  hoursRowLast: {
+    borderBottomWidth: 0
+  },
+  hoursDay: {
+    fontFamily: fonts.body,
+    fontSize: 12.5,
+    lineHeight: 17,
+    color: colors.muted
+  },
+  hoursTime: {
+    fontFamily: fonts.body,
+    fontSize: 12.5,
+    lineHeight: 17,
+    color: colors.muted,
+    textAlign: "right"
+  },
+  hoursTextToday: {
+    fontFamily: fonts.semi,
+    color: colors.ink
   },
   facts: {
     flexDirection: "row",

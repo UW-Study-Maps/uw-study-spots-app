@@ -231,6 +231,7 @@ export default function HomeScreen() {
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
+            style={styles.sortRowScroll}
             contentContainerStyle={styles.sortRow}
           >
             {SORT_OPTIONS.map((opt) => (
@@ -379,6 +380,14 @@ const styles = StyleSheet.create({
     lineHeight: 14,
     paddingHorizontal: 4,
     paddingBottom: 6
+  },
+  // ScrollView defaults to flexGrow: 1 when horizontal, which — unlike in the
+  // auto-height header above — matters here because `sheet` has a fixed
+  // height: this row would otherwise fight styles.list's flex: 1 for space
+  // and balloon to fill half of it, stretching every pill along the way.
+  sortRowScroll: {
+    flexGrow: 0,
+    flexShrink: 0
   },
   sortRow: {
     gap: 6,

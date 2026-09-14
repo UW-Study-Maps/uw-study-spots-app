@@ -22,17 +22,18 @@ interface Props {
  */
 export function StepSlider({ label, steps, value, onChange }: Props) {
   const [trackWidth, setTrackWidth] = useState(0);
-  const trackRef = useRef<View>(null);
-  const trackPageX = useRef(0);
   const widthRef = useRef(0);
   const valueRef = useRef(value);
   valueRef.current = value;
 
-  const indexFromPageX = useCallback(
-    (pageX: number) => {
+  // locationX is relative to the touched view itself, so it stays correct
+  // even when an ancestor ScrollView has scrolled — unlike pageX, which is an
+  // absolute screen coordinate that would need re-measuring on every scroll.
+  const indexFromLocationX = useCallback(
+    (locationX: number) => {
       const width = widthRef.current;
       if (width <= 0) return valueRef.current;
-      const ratio = Math.min(1, Math.max(0, (pageX - trackPageX.current) / width));
+      const ratio = Math.min(1, Math.max(0, locationX / width));
       return Math.round(ratio * (steps.length - 1));
     },
     [steps.length]
@@ -42,8 +43,8 @@ export function StepSlider({ label, steps, value, onChange }: Props) {
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: () => true,
-      onPanResponderGrant: (event) => onChange(indexFromPageX(event.nativeEvent.pageX)),
-      onPanResponderMove: (event) => onChange(indexFromPageX(event.nativeEvent.pageX))
+      onPanResponderGrant: (event) => onChange(indexFromLocationX(event.nativeEvent.locationX)),
+      onPanResponderMove: (event) => onChange(indexFromLocationX(event.nativeEvent.locationX))
     })
   ).current;
 
@@ -51,9 +52,6 @@ export function StepSlider({ label, steps, value, onChange }: Props) {
     const width = event.nativeEvent.layout.width;
     widthRef.current = width;
     setTrackWidth(width);
-    trackRef.current?.measure((_x, _y, _w, _h, pageX) => {
-      trackPageX.current = pageX;
-    });
   }
 
   const ratio = steps.length > 1 ? value / (steps.length - 1) : 0;
@@ -69,7 +67,6 @@ export function StepSlider({ label, steps, value, onChange }: Props) {
       </View>
 
       <View
-        ref={trackRef}
         style={styles.track}
         onLayout={handleLayout}
         hitSlop={{ top: 14, bottom: 14 }}
